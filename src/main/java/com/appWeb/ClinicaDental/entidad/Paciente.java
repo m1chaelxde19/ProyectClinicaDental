@@ -36,7 +36,7 @@ public class Paciente {
     private Timestamp fecha_registro;
 
     //relacion con usuario
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "Usuario_id",nullable = false)
     private Usuario usuario;
 

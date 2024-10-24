@@ -8,11 +8,11 @@ import com.appWeb.ClinicaDental.repositorio.OdontologoReposity;
 import com.appWeb.ClinicaDental.repositorio.PacienteReposity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +30,18 @@ public class CitaService {
     @Autowired
     private HorarioReposity horarioReposity;
 
-    public List<CitaDTO> obtenerCitasConOdontologo() {
-        return citaReposity.findCitasConOdontologo();
+    public List<CitaDTO> getCitasOdontologicas(){
+        List<CitaDTO> citas = new ArrayList<>();
+        for (Object[] fila: citaReposity.citasConOdontologos()){
+            CitaDTO citaDTO = new CitaDTO(
+                    (Date) fila[0], (Time) fila[1], MotivoCita.valueOf((String) fila[2]),
+                    (String) fila[3], (String) fila[4], (String) fila[5]
+            );
+            citas.add(citaDTO);
+        }
+        return citas;
     }
 
-    public List<Cita> obtenerCitas() {
-        return citaReposity.findAll();
-    }
     public void agregarCita(Date fecha, Time hora, MotivoCita motivoCita,
                             Status estadoCita, Long idPaciente, Long Idodont,
                             String comentarios) {
@@ -44,7 +49,7 @@ public class CitaService {
         System.out.println("DayOfWeek: "+diaSemana);
         DiaSemana diaConvertido = convertir(diaSemana);
         System.out.println("Dia convertido: "+diaConvertido);
-        Optional<Horario> horarioOp = horarioReposity.findHorarioByOdontologoAndHora(Idodont,diaConvertido,hora);
+        Optional<Horario> horarioOp = horarioReposity.findHorarioByOdontologoAndHora(Idodont,diaConvertido.name(),hora);
         if(horarioOp.isPresent()) {
             Cita citasa = new Cita();
             citasa.setFecha(fecha);
