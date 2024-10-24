@@ -14,8 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface HorarioReposity extends JpaRepository<Horario,Long> {
-    @Query("SELECT h FROM horario h WHERE h.odontologo.id_Odontologo = :odontologoId AND h.dia_semana = :diaSemana AND :hora BETWEEN h.hora_inicio AND h.hora_fin")
+    //@Query("SELECT h FROM horario h WHERE h.odontologo.id_Odontologo = :odontologoId AND h.dia_semana = :diaSemana AND :hora BETWEEN h.hora_inicio AND h.hora_fin")
+    @Query(value = "Call horarioDisponible(:odontologoId,:diaSemana,:hora)", nativeQuery = true)
     Optional<Horario> findHorarioByOdontologoAndHora(@Param("odontologoId") Long odontologoId,
-                                                     @Param("diaSemana") DiaSemana diaSemana,
+                                                     @Param("diaSemana") String diaSemana,
                                                      @Param("hora") Time hora);
 }
