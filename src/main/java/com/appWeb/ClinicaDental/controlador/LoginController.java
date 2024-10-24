@@ -19,7 +19,7 @@ public class LoginController {
     }
 
     @PostMapping("/loginValidation")
-    public String validarLogin(@RequestParam("email") String correo, @RequestParam("clave") String clave, Model model, HttpSession session) {
+    public String validarLogin(@RequestParam("correo") String correo, @RequestParam("clave") String clave, Model model, HttpSession session) {
         try {
             usuarioService.validarLogin(correo, clave,session);
             return "redirect:/Dashboard";

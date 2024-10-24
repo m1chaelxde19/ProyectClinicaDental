@@ -24,28 +24,33 @@ public class UsuarioService {
         return usuarioReposity.findByEmail(email);
     }
 
-    public List<Usuario> listar() {
-        return usuarioReposity.findAll();
-    }
-
-
     public void validarLogin(String email, String password, HttpSession session) {
         Preconditions.checkNotNull(email,"El campo del correo no puede ser nulo");
-        Preconditions.checkNotNull(password,"El campo del correo no puede ser nulo");
-
         Preconditions.checkArgument(!email.isEmpty(), "El campo del correo no puede ser vacío");
-        Preconditions.checkArgument(!password.isEmpty(), "El campo de la contraseña no puede ser vacío");
-
         Preconditions.checkArgument(VALID_INPUT_PATTERN.matcher(email).matches(),"El campo del correo tiene un formato no válido");
-
-        Preconditions.checkArgument(!password.contains(";") || !password.contains("--") || !password.contains("<") || !password.contains(">"),
-                "La contraseña tiene carácteres raros");
-
+        validarClave(password);
         Usuario usuario = buscarEmail(email);
-        if (usuario == null || !passCode(password).equals(usuario.getClave())) {
+        String pass = passCode(password);
+        if (usuario == null || !pass.equals(usuario.getClave())) {
             throw new IllegalArgumentException("El campo del correo o contraseña no son correctos");
         }else{
             session.setAttribute("usuarioLogueado", usuario);
+        }
+    }
+
+    public void validarClave(String clave) {
+        Preconditions.checkNotNull(clave,"El campo del correo no puede ser nulo");
+        Preconditions.checkArgument(!clave.isEmpty(), "El campo de la contraseña no puede ser vacío");
+        Preconditions.checkArgument(!clave.contains(";") || !clave.contains("--") || !clave.contains("<") || !clave.contains(">"),
+                "La contraseña tiene carácteres raros");
+    }
+
+    public void actualizarClave(String email, String clave) {
+        try {
+            validarClave(clave);
+           usuarioReposity.actualizarClave(email, passCode(clave));
+        }catch (Exception e){
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
