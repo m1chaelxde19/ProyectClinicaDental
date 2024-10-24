@@ -28,7 +28,7 @@ public class CitaController {
 
     @GetMapping
     public String citas(Model model){
-        List<CitaDTO> citas = citaService.obtenerCitasConOdontologo();
+        List<CitaDTO> citas = citaService.getCitasOdontologicas();
         List<Odontologo> odontologos = odontologoService.findAll();
         List<Paciente> pacientes = pacienteService.findAll();
         model.addAttribute("motivoCitas", MotivoCita.values());
