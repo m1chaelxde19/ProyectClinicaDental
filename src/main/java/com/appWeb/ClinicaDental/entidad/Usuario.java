@@ -73,6 +73,6 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Secretario secretario;
 
-    @OneToOne(mappedBy = "usuario")
-    private Paciente paciente;
+    @OneToMany(mappedBy = "usuario")
+    private List<Paciente> pacientes;
 }
