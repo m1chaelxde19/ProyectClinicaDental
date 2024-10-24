@@ -62,8 +62,8 @@
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.17.0</version>
+			<artifactId>commons-email</artifactId>
+			<version>1.6.0</version>
 		</dependency>
 
 		<dependency>
