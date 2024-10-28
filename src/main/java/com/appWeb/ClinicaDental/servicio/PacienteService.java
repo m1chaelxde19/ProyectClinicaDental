@@ -12,7 +12,15 @@ public class PacienteService {
     @Autowired
     private PacienteReposity pacienteReposity;
 
-    public List<Paciente> findAll() {
+
+    public List<Paciente> listar() {
         return pacienteReposity.findAll();
     }
+
+    public void savePaciente(Paciente paciente, Long idUser) {
+            pacienteReposity.savePaciente(paciente.getNombre(), paciente.getApellido(), paciente.getDni(), paciente.getFechaNacimiento(), paciente.getTelefono(),
+                    paciente.getEmail(),paciente.getDireccion(),idUser);
+    }
+
+
 }

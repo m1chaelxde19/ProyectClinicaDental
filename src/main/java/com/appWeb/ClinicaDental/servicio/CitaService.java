@@ -1,21 +1,24 @@
 package com.appWeb.ClinicaDental.servicio;
 
 import com.appWeb.ClinicaDental.Recursos.CitaDTO;
+import com.appWeb.ClinicaDental.Recursos.CitaProyection;
 import com.appWeb.ClinicaDental.entidad.*;
 import com.appWeb.ClinicaDental.repositorio.CitaReposity;
 import com.appWeb.ClinicaDental.repositorio.HorarioReposity;
 import com.appWeb.ClinicaDental.repositorio.OdontologoReposity;
 import com.appWeb.ClinicaDental.repositorio.PacienteReposity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CitaService {
     @Autowired
@@ -31,15 +34,12 @@ public class CitaService {
     private HorarioReposity horarioReposity;
 
     public List<CitaDTO> getCitasOdontologicas(){
-        List<CitaDTO> citas = new ArrayList<>();
-        for (Object[] fila: citaReposity.citasConOdontologos()){
-            CitaDTO citaDTO = new CitaDTO(
-                    (Date) fila[0], (Time) fila[1], MotivoCita.valueOf((String) fila[2]),
-                    (String) fila[3], (String) fila[4], (String) fila[5]
-            );
-            citas.add(citaDTO);
-        }
-        return citas;
+        List<CitaProyection> proyections = citaReposity.citasConOdontologos();
+        return proyections.stream().map(proyection-> new CitaDTO(
+            proyection.getFecha(),proyection.getHora(),
+                proyection.getMotivoCita(), proyection.getNombre(), proyection.getApellido(),
+                proyection.getComentarios()
+        )).collect(Collectors.toList());
     }
 
     public void agregarCita(Date fecha, Time hora, MotivoCita motivoCita,
@@ -63,6 +63,7 @@ public class CitaService {
             citasa.setHorario(horarioOp.get());
             citaReposity.save(citasa);
         }else{
+            log.warn("WARN: Horario no encontrado");
             throw new IllegalArgumentException("Horario no disponible");
         }
     }

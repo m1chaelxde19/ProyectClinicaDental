@@ -16,7 +16,6 @@ import java.util.Optional;
 public interface UsuarioReposity extends JpaRepository<Usuario, Long> {
    Usuario findByEmail(String email);
 
-
    @Modifying
    @Transactional
    @Query(value = "Call actualizarClave(:clave,:correo)", nativeQuery = true)

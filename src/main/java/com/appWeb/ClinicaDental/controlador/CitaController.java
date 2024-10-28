@@ -1,10 +1,12 @@
 package com.appWeb.ClinicaDental.controlador;
 
 import com.appWeb.ClinicaDental.Recursos.CitaDTO;
+import com.appWeb.ClinicaDental.Recursos.Sesion;
 import com.appWeb.ClinicaDental.entidad.*;
 import com.appWeb.ClinicaDental.servicio.CitaService;
 import com.appWeb.ClinicaDental.servicio.OdontologoService;
 import com.appWeb.ClinicaDental.servicio.PacienteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/cita")
 public class CitaController {
@@ -26,17 +29,25 @@ public class CitaController {
     @Autowired
     private PacienteService pacienteService;
 
+    @Autowired
+    private Sesion sesion;
+
     @GetMapping
-    public String citas(Model model){
-        List<CitaDTO> citas = citaService.getCitasOdontologicas();
-        List<Odontologo> odontologos = odontologoService.findAll();
-        List<Paciente> pacientes = pacienteService.findAll();
-        model.addAttribute("motivoCitas", MotivoCita.values());
-        model.addAttribute("estados",Status.values());
-        model.addAttribute("citas", citas);
-        model.addAttribute("odontologos", odontologos);
-        model.addAttribute("pacientes", pacientes);
-        return "Cita";
+    public String citas(Model model) {
+        if (sesion.isLogged()) {
+            log.info("INFO: Mostrando la vista de cita...");
+            List<CitaDTO> citas = citaService.getCitasOdontologicas();
+            List<Odontologo> odontologos = odontologoService.findAll();
+            List<Paciente> pacientes = pacienteService.listar();
+            model.addAttribute("motivoCitas", MotivoCita.values());
+            model.addAttribute("estados",Status.values());
+            model.addAttribute("citas", citas);
+            model.addAttribute("odontologos", odontologos);
+            model.addAttribute("pacientes", pacientes);
+            return "Cita";
+        }else {
+            return "redirect:/api";
+        }
     }
 
     @PostMapping("/saveCita")
@@ -47,12 +58,10 @@ public class CitaController {
     ){
         try {
             Time horaConvertida = Time.valueOf(LocalTime.parse(hora));
-            System.out.println("odontologo: "+Idodont);
-            System.out.println("hora: " + hora);
-            System.out.println("fecha: " +fecha);
             citaService.agregarCita(fecha, horaConvertida, motivoCita, estadoCita, idPaciente, Idodont, comentarios);
             redirectAttributes.addFlashAttribute("confirm","Se guardó correctamente la cita");
         }catch (IllegalArgumentException e){
+            log.error("ERROR: {}", e.getMessage());
             redirectAttributes.addFlashAttribute("errorCita",e.getMessage());
         }
         return "redirect:/cita";

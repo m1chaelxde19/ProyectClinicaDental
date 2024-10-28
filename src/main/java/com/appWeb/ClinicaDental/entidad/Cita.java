@@ -33,7 +33,7 @@ public class Cita {
     private String comentarios;
 
     @ManyToOne
-    @JoinColumn(name = "Paciente_id", nullable = true)
+    @JoinColumn(name = "Paciente_id", nullable = false)
     private Paciente paciente;
 
     @OneToMany(mappedBy = "cita")

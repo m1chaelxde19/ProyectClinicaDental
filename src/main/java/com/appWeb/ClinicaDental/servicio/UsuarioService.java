@@ -1,10 +1,12 @@
 package com.appWeb.ClinicaDental.servicio;
 
+import com.appWeb.ClinicaDental.Recursos.Sesion;
 import com.appWeb.ClinicaDental.entidad.Usuario;
 import com.appWeb.ClinicaDental.repositorio.UsuarioReposity;
 import com.google.common.base.Preconditions;
 import com.google.common.hash.Hashing;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.regex.Pattern;
-
+@Slf4j
 @Service
 public class UsuarioService {
     @Autowired
@@ -24,7 +26,7 @@ public class UsuarioService {
         return usuarioReposity.findByEmail(email);
     }
 
-    public void validarLogin(String email, String password, HttpSession session) {
+    public Usuario validarLogin(String email, String password) {
         Preconditions.checkNotNull(email,"El campo del correo no puede ser nulo");
         Preconditions.checkArgument(!email.isEmpty(), "El campo del correo no puede ser vacío");
         Preconditions.checkArgument(VALID_INPUT_PATTERN.matcher(email).matches(),"El campo del correo tiene un formato no válido");
@@ -32,10 +34,9 @@ public class UsuarioService {
         Usuario usuario = buscarEmail(email);
         String pass = passCode(password);
         if (usuario == null || !pass.equals(usuario.getClave())) {
-            throw new IllegalArgumentException("El campo del correo o contraseña no son correctos");
-        }else{
-            session.setAttribute("usuarioLogueado", usuario);
+            return null;
         }
+        return usuario;
     }
 
     public void validarClave(String clave) {
@@ -46,10 +47,12 @@ public class UsuarioService {
     }
 
     public void actualizarClave(String email, String clave) {
+        log.info("INFO: Actualizando la contraseña del {}",email);
         try {
             validarClave(clave);
            usuarioReposity.actualizarClave(email, passCode(clave));
         }catch (Exception e){
+            log.error("ERROR: Ocurrió un error al intentar actualizar la contraseña {}",e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
