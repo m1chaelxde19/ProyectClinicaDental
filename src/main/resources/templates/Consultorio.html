@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Consultorio</title>
+    <style>
+        .botones{display: flex; justify-content: space-between; align-items: center}
+    </style>
+</head>
+<body>
+    <div class="container botones">
+        <h1>Consultorio</h1>
+        <div>
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Consultorio</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Nombre Consultorio</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Capacidad</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Estado</th>
+                <th scope="col" >Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="consultorio: ${consultorios}">
+                <td th:text="${consultorio.nombre}"></td>
+                <td th:text="${consultorio.direccion}"></td>
+                <td th:text="${consultorio.capacidad}"></td>
+                <td th:text="${consultorio.telefono}"></td>
+                <td th:text="${consultorio.estado.name()}"></td>
+                <td class="d-flex">
+                    <a href="#" class="btn btn-primary">Editar</a>
+                    <a href="#" class="btn btn-danger mx-1">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Registro de consultorio</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form th:action="@{/consultorio}" method="post" th:object="${consultorio}">
+                        <div class="row">
+                            <div class="col-6 col-ms-12 mb-1">
+                                <label for="nombre">Nombre del consultorio</label>
+                                <input id="nombre" type="text" class="form-control" th:field="*{nombre}">
+                            </div>
+
+                            <div class="col-6 col-ms-12 mb-1">
+                                <label for="ubicacion">Ubicación</label>
+                                <input id="ubicacion" type="text" class="form-control" th:field="*{direccion}">
+                            </div>
+
+                            <div class="col-4 col-ms-4 mb-1">
+                                <label for="capacidad">Capacidad</label>
+                                <input type="number" id="capacidad" class="form-control" th:field="*{capacidad}">
+                            </div>
+
+                            <div class="col-4 col-ms-4 mb-1">
+                                <label for="telefono">Teléfono</label>
+                                <input type="tel" id="telefono" class="form-control" th:field="*{telefono}">
+                            </div>
+
+                            <div class="col-4 mb-1">
+                                <label for="selecEstado">Estado</label>
+                                <select class="form-select" id="selecEstado" name="estado">
+                                    <option th:each="estado : ${estadosConsultorio}"
+                                            th:value="${estado}"
+                                            th:text="${estado}">
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="mensajeAdvertencia"></div>
+
+        <div th:if="${mensajeConfirmacion}" class="bg-primary">
+            <p th:text="${mensajeConfirmacion}" style="color: white"></p>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded",function (){
+            let errorMessages = /*[[${errores}]]*/ [];
+            setTimeout(function (){
+                if (errorMessages.length > 0) {
+
+                    // Crear una lista de errores
+                    let ul = document.createElement('ul');
+                    ul.id = 'errorList';
+
+                    errorMessages.forEach(function(message) {
+                        let li = document.createElement('li');
+                        li.textContent = message;
+                        ul.appendChild(li);
+                    });
+
+                    // Insertar la lista en el div #mensajeAdvertencia
+                    document.getElementById('mensajeAdvertencia').appendChild(ul);
+                }
+            },100);
+        });
+    </script>
+</body>
+</html>
