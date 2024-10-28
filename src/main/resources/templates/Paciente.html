@@ -1,11 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Paciente</title>
+    <style>
+        .botones{display: flex; justify-content: space-between; align-items: center}
+    </style>
 </head>
 <body>
-    <h1>Hola como estas</h1>
-    <h2>XDE</h2>
+    <div class="container botones">
+        <h1>Pacientes</h1>
+        <div>
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Paciente</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">Dni</th>
+                <th scope="col">Nombres y apellidos</th>
+                <th scope="col">Fecha nacimiento</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Dirección</th>
+                <th scope="col" >Correo</th>
+                <th scope="col" >Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="paciente: ${listPacienteCOnEdad}">
+                <td th:text="${paciente.dni}"></td>
+                <td th:text="${paciente.nombre+' '+paciente.apellido}"></td>
+                <td th:text="${#dates.format(paciente.fechaNacimiento,'dd/MM/yyyy')}"></td>
+                <td th:text="${paciente.telefono}"></td>
+                <td th:text="${paciente.direccion}"></td>
+                <td th:text="${paciente.email}"></td>
+                <td class="d-flex">
+                    <a href="#" class="btn btn-primary">Editar</a>
+                    <a href="#" class="btn btn-danger mx-1">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+        <div class="modal" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Registro de pacientes</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form th:action="@{/paciente/pacienteValidation}" method="post" th:object="${paciente}">
+                            <div class="row">
+                                <div class="col-6 col-ms-12 mb-1">
+                                    <label for="nombre">Nombres</label>
+                                    <input id="nombre" type="text" class="form-control" th:field="*{nombre}"><div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                                </div>
+
+                                <div class="col-6 col-ms-12 mb-1">
+                                    <label for="apellidos">Apellidos</label>
+                                    <input id="apellidos" type="text" class="form-control" th:field="*{apellido}">
+                                </div>
+
+                                <div class="col-4 col-ms-4 mb-1">
+                                    <label for="dni">Dni</label>
+                                    <input type="text" id="dni" class="form-control" th:field="*{dni}">
+                                </div>
+
+                                <div class="col-4 col-ms-4 mb-1">
+                                    <label for="fechaNacimiento">Fecha de nacimiento</label>
+                                   <input type="date" id="fechaNacimiento" class="form-control" th:field="*{fechaNacimiento}">
+                                </div>
+
+                                <div class="col-4 mb-1">
+                                    <label for="celular">Teléfono</label>
+                                    <input type="tel" id="celular" class="form-control" th:field="*{telefono}">
+                                </div>
+
+                                <div class="col-4 mb-1">
+                                    <label for="correo">Correo Electrónico</label>
+                                    <input  type="email" id="correo" class="form-control" th:field="*{email}">
+                                </div>
+
+                                <div class="col-4 mb-1">
+                                    <label for="addres">Dirección</label>
+                                    <input type="text" id="addres" class="form-control" th:field="*{direccion}">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="container">
+        <div id="mensajeAdvertencia"></div>
+
+        <div  class="dg-danger">
+            <p style="color: white" id="msgError"></p>
+        </div>
+
+        <div th:if="${mensajeConfirmacion}" class="bg-danger">
+            <p th:text="${mensajeConfirmacion}" style="color: white"></p>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded",function (){
+            let errorMessages = /*[[${errorMessages}]]*/ [];
+            setTimeout(function (){
+                if (errorMessages.length > 0) {
+
+                    // Crear una lista de errores
+                    let ul = document.createElement('ul');
+                    ul.id = 'errorList';
+
+                    errorMessages.forEach(function(message) {
+                        let li = document.createElement('li');
+                        li.textContent = message;
+                        ul.appendChild(li);
+                    });
+
+                    // Insertar la lista en el div #mensajeAdvertencia
+                    document.getElementById('mensajeAdvertencia').appendChild(ul);
+                }
+            },100);
+        });
+    </script>
 </body>
 </html>

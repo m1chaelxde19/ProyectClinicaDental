@@ -19,16 +19,17 @@
         <main class="container-fluid">
             <div class="row ">
                 <div class="col-md-3 text-center navega p-3">
-                    <h1 th:if="${session.usuarioLogueado!=null}">
-                        Bienvenido <span th:text="${session.usuarioLogueado.getNombre()}"></span>
+                    <h1 th:if="${nombre != null}">
+                        Bienvenido <span th:text="${nombre}"></span>
                     </h1>
                     <h2>Panel de control</h2>
                     <a href="#" class="nav-link">Administradores</a>
                     <a th:href="@{/cita}" class="nav-link">Citas</a>
-                    <a href="#" class="nav-link">Pacientes</a>
-                    <a href="#" class="nav-link">Consultorios</a>
-                    <a href="#" class="nav-link">Doctores</a>
-                    <a class="nav-link" th:if="${session.usuarioLogueado!=null}" th:href="@{/api/logout}">Cerrar sesión</a>
+                    <a th:href="@{/paciente}" class="nav-link">Pacientes</a>
+                    <a th:href="@{/consultorio}" class="nav-link">Consultorios</a>
+                    <a th:href="@{/doctor}" class="nav-link">Doctores</a>
+                    <a th:href="@{/horario}" class="nav-link">Horario</a>
+                    <a class="nav-link" th:if="${nombre!=null}" th:href="@{/api/logout}">Cerrar sesión</a>
                 </div>
                 <div class="col-8">
                     <h2>Panel Principal</h2>
