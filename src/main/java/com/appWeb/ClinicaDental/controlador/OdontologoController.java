@@ -33,7 +33,7 @@ public class OdontologoController {
             model.addAttribute("odontologos", odontologos);
             model.addAttribute("nombre", sesion.getNombre());
             model.addAttribute("odontologo",new Odontologo());
-            return "Doctor";
+            return "Odontologo";
         }else{
             return "redirect:/api";
         }
