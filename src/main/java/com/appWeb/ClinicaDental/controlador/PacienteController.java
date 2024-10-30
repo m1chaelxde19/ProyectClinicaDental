@@ -1,10 +1,14 @@
 package com.appWeb.ClinicaDental.controlador;
 
+import com.appWeb.ClinicaDental.ClinicaDentalApplication;
 import com.appWeb.ClinicaDental.Recursos.Sesion;
 import com.appWeb.ClinicaDental.entidad.Paciente;
 import com.appWeb.ClinicaDental.servicio.PacienteService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,12 +52,14 @@ public class PacienteController {
             List<String> errorMessages = new ArrayList<>();
 
             result.getFieldErrors().forEach(error -> {
+               //logger.warn(error.getDefaultMessage());
                 errorMessages.add(error.getDefaultMessage());
             });
 
             if (fechaInvalida){
                 errorMessages.add("La fecha de nacimiento no puede ser mayor  o igual a la fecha actual");
             }
+
             model.addFlashAttribute("errorMessages", errorMessages);
         }else {
             pacienteService.savePaciente(paciente, sesion.getId_usuario());

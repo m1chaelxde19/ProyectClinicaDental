@@ -12,4 +12,7 @@ import java.util.List;
 public interface CitaReposity extends JpaRepository<Cita, Long>{
     @Query(value = "CALL citasConOdontologos()",nativeQuery = true)
     List<CitaProyection> citasConOdontologos();
+
+    @Query(value = "Call ListadoCitasReservadas()",nativeQuery = true)
+    List<Object[]> ListadoCitasReservadas();
 }

@@ -2,6 +2,7 @@ package com.appWeb.ClinicaDental.servicio;
 
 import com.appWeb.ClinicaDental.entidad.Usuario;
 import com.appWeb.ClinicaDental.repositorio.UsuarioReposity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
@@ -33,6 +34,7 @@ public class EnviarEmail {
     public void enviarEmail(String destinatario) {
         Usuario usuario = buscarEmail(destinatario);
         if (usuario == null) {
+           // log.warn("Usuario no encontrado");
             throw new IllegalArgumentException("Usuario no encontrado");
         }
             try {
@@ -50,6 +52,7 @@ public class EnviarEmail {
                 email.addTo(destinatario);
                 email.send();
             } catch (EmailException e) {
+               // log.error(e.getMessage());
                 throw new IllegalArgumentException("Error al enviar el correo: " + e.getMessage());
             }
     }

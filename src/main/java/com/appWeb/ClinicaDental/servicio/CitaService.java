@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 public class CitaService {
     @Autowired
@@ -32,6 +31,10 @@ public class CitaService {
 
     @Autowired
     private HorarioReposity horarioReposity;
+
+    public List<Object[]> listCitasReservadas(){
+        return citaReposity.ListadoCitasReservadas();
+    }
 
     public List<CitaDTO> getCitasOdontologicas(){
         List<CitaProyection> proyections = citaReposity.citasConOdontologos();
@@ -63,7 +66,7 @@ public class CitaService {
             citasa.setHorario(horarioOp.get());
             citaReposity.save(citasa);
         }else{
-            log.warn("WARN: Horario no encontrado");
+      //      log.warn("WARN: Horario no encontrado");
             throw new IllegalArgumentException("Horario no disponible");
         }
     }

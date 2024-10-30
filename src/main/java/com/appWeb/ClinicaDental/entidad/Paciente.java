@@ -34,7 +34,6 @@ public class Paciente {
     private String telefono;
 
     @Column(name = "email", length = 100,nullable = false)
-    //@Pattern(regexp = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]",message = "Correo no válido")
     private String email;
 
     @Column(name = "direccion", length = 225,nullable = false)

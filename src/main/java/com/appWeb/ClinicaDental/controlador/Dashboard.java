@@ -1,9 +1,6 @@
 package com.appWeb.ClinicaDental.controlador;
 
 import com.appWeb.ClinicaDental.Recursos.Sesion;
-import com.appWeb.ClinicaDental.entidad.Usuario;
-import jakarta.servlet.http.HttpSession;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

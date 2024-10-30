@@ -14,4 +14,8 @@ public class OdontologoService {
     public List<Odontologo> findAll() {
         return odontologoReposity.findAll();
     }
+
+    public void guardar(Odontologo odontologo,Long id) {
+        odontologoReposity.saveOdontologo(odontologo.getDni(),odontologo.getNombre(),odontologo.getApellido(),odontologo.getEspecialidad(),odontologo.getTelefono(),id);
+    }
 }

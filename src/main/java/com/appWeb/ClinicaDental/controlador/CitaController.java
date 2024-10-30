@@ -17,8 +17,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
-@Slf4j
 @Controller
 @RequestMapping("/cita")
 public class CitaController {
@@ -35,7 +36,7 @@ public class CitaController {
     @GetMapping
     public String citas(Model model) {
         if (sesion.isLogged()) {
-            log.info("INFO: Mostrando la vista de cita...");
+        //   log.info("INFO: Mostrando la vista de cita...");
             List<CitaDTO> citas = citaService.getCitasOdontologicas();
             List<Odontologo> odontologos = odontologoService.findAll();
             List<Paciente> pacientes = pacienteService.listar();
@@ -61,7 +62,7 @@ public class CitaController {
             citaService.agregarCita(fecha, horaConvertida, motivoCita, estadoCita, idPaciente, Idodont, comentarios);
             redirectAttributes.addFlashAttribute("confirm","Se guardó correctamente la cita");
         }catch (IllegalArgumentException e){
-            log.error("ERROR: {}", e.getMessage());
+
             redirectAttributes.addFlashAttribute("errorCita",e.getMessage());
         }
         return "redirect:/cita";

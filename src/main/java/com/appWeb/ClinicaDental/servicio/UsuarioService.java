@@ -1,20 +1,15 @@
 package com.appWeb.ClinicaDental.servicio;
 
-import com.appWeb.ClinicaDental.Recursos.Sesion;
 import com.appWeb.ClinicaDental.entidad.Usuario;
 import com.appWeb.ClinicaDental.repositorio.UsuarioReposity;
 import com.google.common.base.Preconditions;
 import com.google.common.hash.Hashing;
-import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.regex.Pattern;
-@Slf4j
+
 @Service
 public class UsuarioService {
     @Autowired
@@ -22,7 +17,7 @@ public class UsuarioService {
 
     private static final Pattern VALID_INPUT_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 
-    private Usuario buscarEmail(String email) {
+    public Usuario buscarEmail(String email) {
         return usuarioReposity.findByEmail(email);
     }
 
@@ -47,12 +42,12 @@ public class UsuarioService {
     }
 
     public void actualizarClave(String email, String clave) {
-        log.info("INFO: Actualizando la contraseña del {}",email);
+   // logger.info("INFO: Actualizando la contraseña del {}",email);
         try {
             validarClave(clave);
-           usuarioReposity.actualizarClave(email, passCode(clave));
+           usuarioReposity.actualizarClave(passCode(clave), email);
         }catch (Exception e){
-            log.error("ERROR: Ocurrió un error al intentar actualizar la contraseña {}",e.getMessage());
+         //   logger.error("Error al actualizar la contraseña {}", e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }
