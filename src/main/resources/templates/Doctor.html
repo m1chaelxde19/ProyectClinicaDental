@@ -22,7 +22,7 @@
 </head>
 <body>
   <header class="container-fluid fondo py-2">
-      <img src="../static/img/imagen.png" alt="Dental Logo" class="logo">
+      <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
       <h1>Diseño Dental</h1>
   </header>
 
@@ -30,7 +30,7 @@
       <div class="row">
           <div class="col-3 bg-info py-2">
               <div class="container divFotoWelcome">
-                  <img src="../static/img/avatar.png" alt="Profile Picture" class="profile-pic">
+                  <img th:src="@{/img/avatar.png}" alt="Profile Picture" class="profile-pic">
                   <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
               </div>
                 <hr>
