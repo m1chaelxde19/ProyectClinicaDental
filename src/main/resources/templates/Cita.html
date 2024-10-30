@@ -8,12 +8,49 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <title>Citas</title>
   <style>
+    header{
+      display: flex; justify-content: center; align-items: center; gap: 50px;
+    }
+    header img{width: 90px}
+    .fondo{background-color: #BA68C8}
+    .divFotoWelcome{display: flex; justify-content: center;align-items: center;gap:10px}
+    .divFotoWelcome img{width: 50px}
+    h1{color: white}
+
     .botones{display: flex; justify-content: space-between; align-items: center}
   </style>
+  <title>Citas</title>
 </head>
 <body>
+<header class="container-fluid fondo py-2">
+  <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
+  <h1>Diseño Dental</h1>
+</header>
+
+<main class="container-fluid">
+  <div class="row">
+    <div style="background-color: #40E0D0" class="col-2 py-2">
+      <div class="container divFotoWelcome">
+          <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
+          <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
+      </div>
+      <hr>
+      <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
+      <hr>
+      <div class="d-grid gap-1 col-8 mx-auto">
+        <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
+        <a class="btn btn-primary my-2" th:href="@{/paciente}">PACIENTES</a>
+        <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
+        <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
+        <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
+        <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
+        <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
+        <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
+      </div>
+    </div>
+<div class="col-10">
   <div class="container botones">
-    <h1>Citas</h1>
+    <h2>Listado de Citas</h2>
     <div>
       <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar cita</button>
       <a class="btn btn-primary" th:href="@{/paciente}">Ver paciente</a>
@@ -23,27 +60,27 @@
   <div class="container">
     <table class="table table-bordered">
       <thead>
-        <tr>
-          <th scope="col">Fecha</th>
-          <th scope="col">Hora</th>
-          <th scope="col">Motivo de la cita</th>
-          <th scope="col">Odontólogo</th>
-          <th scope="col">Comentarios</th>
-          <th scope="col" >Acciones</th>
-        </tr>
+      <tr>
+        <th scope="col">Fecha</th>
+        <th scope="col">Hora</th>
+        <th scope="col">Motivo de la cita</th>
+        <th scope="col">Odontólogo</th>
+        <th scope="col">Comentarios</th>
+        <th scope="col" >Acciones</th>
+      </tr>
       </thead>
       <tbody>
-        <tr th:each="cita: ${citas}">
-          <td th:text="${cita.fecha}"></td>
-          <td th:text="${cita.hora}"></td>
-          <td th:text="${cita.motivoCita}"></td>
-          <td th:text="${cita.nombreOdontologo+' '+cita.apellidoOdontologo}"></td>
-          <td th:text="${cita.comentarios}"></td>
-          <td class="d-flex">
-            <a href="#" class="btn btn-primary">Editar</a>
-            <a href="#" class="btn btn-danger mx-1">Eliminar</a>
-          </td>
-        </tr>
+      <tr th:each="cita: ${citas}">
+        <td th:text="${cita.fecha}"></td>
+        <td th:text="${cita.hora}"></td>
+        <td th:text="${cita.motivoCita}"></td>
+        <td th:text="${cita.nombreOdontologo+' '+cita.apellidoOdontologo}"></td>
+        <td th:text="${cita.comentarios}"></td>
+        <td class="d-flex">
+          <a href="#" class="btn btn-primary">Editar</a>
+          <a href="#" class="btn btn-danger mx-1">Eliminar</a>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>
@@ -85,10 +122,10 @@
               <div class="col-6 col-ms-6 mb-1">
                 <label for="selecMotivo">Motivo de la cita</label>
                 <select class="form-select" id="selecMotivo" name="motivoCita">
-                 <option th:each="citaEn : ${motivoCitas}"
-                         th:value="${citaEn}"
-                         th:text="${citaEn}">
-                 </option>
+                  <option th:each="citaEn : ${motivoCitas}"
+                          th:value="${citaEn}"
+                          th:text="${citaEn}">
+                  </option>
                 </select>
               </div>
 
@@ -136,5 +173,8 @@
       </div>
     </div>
   </div>
+</div>
+  </div>
+</main>
 </body>
 </html>

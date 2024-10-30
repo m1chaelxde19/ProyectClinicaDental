@@ -8,16 +8,52 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <title>Paciente</title>
     <style>
+        header{
+            display: flex; justify-content: center; align-items: center; gap: 50px;
+        }
+        header img{width: 90px}
+        .fondo{background-color: #BA68C8}
+        .divFotoWelcome{display: flex; justify-content: center;align-items: center;gap:10px}
+        .divFotoWelcome img{width: 50px}
+        h1{color: white}
+
         .botones{display: flex; justify-content: space-between; align-items: center}
     </style>
 </head>
 <body>
+<header class="container-fluid fondo py-2">
+    <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
+    <h1>Diseño Dental</h1>
+</header>
+<main class="container-fluid">
+    <div class="row">
+        <div style="background-color: #40E0D0" class="col-2 py-2">
+            <div class="container divFotoWelcome">
+                <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
+                <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
+            </div>
+            <hr>
+            <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
+            <hr>
+            <div class="d-grid gap-1 col-8 mx-auto">
+                <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/paciente}">PACIENTES</a>
+                <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
+                <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
+                <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
+            </div>
+        </div>
+        <div class="col-10">
     <div class="container botones">
-        <h1>Pacientes</h1>
+        <h2>Listado de Pacientes</h2>
         <div>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Paciente</button>
         </div>
     </div>
+
 
     <div class="container">
         <table class="table table-bordered">
@@ -106,6 +142,7 @@
                 </div>
             </div>
         </div>
+    </div>
     <div class="container">
         <div id="mensajeAdvertencia"></div>
 
@@ -117,7 +154,8 @@
             <p th:text="${mensajeConfirmacion}" style="color: white"></p>
         </div>
     </div>
-
+    </div>
+</main>
     <script th:inline="javascript">
         document.addEventListener("DOMContentLoaded",function (){
             let errorMessages = /*[[${errorMessages}]]*/ [];

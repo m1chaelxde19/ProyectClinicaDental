@@ -30,7 +30,7 @@
 
 <main class="container-fluid">
     <div class="row">
-        <div class="col-3 bg-info py-2">
+        <div style="background-color: #40E0D0" class="col-3 py-2">
             <div class="container divFotoWelcome">
                 <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
                 <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-9">
             <div class="container botones">
-                <h1>Consultorio</h1>
+                <h2>Listado de Consultorios</h2>
                 <div>
                     <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Consultorio</button>
                 </div>
