@@ -23,15 +23,22 @@ public class LoginController {
 
     @PostMapping("/loginValidation")
     public String validarLogin(@RequestParam("correo") String correo, @RequestParam("clave") String clave, Model model) {
+        try {
             Usuario usuario= usuarioService.validarLogin(correo, clave);
             if (usuario == null) {
                 model.addAttribute("error","Credenciales incorrecta");
                 return "index";
             }
-                sesion.setId_usuario(usuario.getId_usuario());
-                sesion.setNombre(usuario.getNombre());
-                model.addAttribute("nombre", usuario.getNombre());
-                return "redirect:/Dashboard";
+            sesion.setId_usuario(usuario.getId_usuario());
+            sesion.setNombre(usuario.getNombre());
+            model.addAttribute("nombre", usuario.getNombre());
+            return "redirect:/Dashboard";
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            model.addAttribute("error",e.getMessage());
+            return "index";
+        }
+
     }
 
     @GetMapping("/logout")

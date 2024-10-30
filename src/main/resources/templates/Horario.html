@@ -28,10 +28,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="odontologo: ${odontologos}">
-                <td th:text="${odontologo.dni}"></td>
-                <td th:text="${odontologo.nombre}"></td>
-                <td th:text="${odontologo.apellido}"></td>
+            <tr th:each="horario: ${horarios}">
+                <td th:text="${horario.dia_semana}"></td>
+                <td th:text="${horario.hora_inicio}"></td>
+                <td th:text="${horario.hora_fin}"></td>
                 <td class="d-flex">
                     <a href="#" class="btn btn-primary">Editar</a>
                     <a href="#" class="btn btn-danger mx-1">Eliminar</a>
@@ -54,48 +54,57 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h4 class="modal-title">Registro de consultorio</h4>
+                    <h4 class="modal-title">Registro de Horarios</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form th:action="@{/doctor}" method="post" th:object="${odontologo}">
+                    <form th:action="@{/horario}" method="post" th:object="${Objthorario}">
                         <div class="row">
-                            <div class="col-6 col-ms-12 mb-1">
-                                <label for="dni">DNI</label>
-                                <input id="dni" type="text" class="form-control" th:field="*{dni}" required>
-                            </div>
+                                <div class="col-6 col-ms-12 mb-1">
+                                    <label for="selecDia">Día de la semana</label>
+                                    <select class="form-select" id="selecDia" th:field="*{dia_semana}">
+                                        <option
+                                        th:each="dia:${diasSemana}" th:value="${dia}" th:text="${dia}"
+                                        >
+                                        </option>
+                                    </select>
+                                </div>
 
-                            <div class="col-6 col-ms-12 mb-1">
-                                <label for="nombres">Nombres</label>
-                                <input id="nombres" type="text" class="form-control" th:field="*{nombre}" required>
-                            </div>
+                                <div class="col-6 col-ms-12 mb-1">
+                                    <label for="horaini">Hora inicio</label>
+                                    <input id="horaini" type="time" class="form-control" th:field="*{hora_inicio}" required>
+                                </div>
 
-                            <div class="col-4 col-ms-4 mb-1">
-                                <label for="apellidos">Apellidos</label>
-                                <input type="text" id="apellidos" class="form-control" th:field="*{apellido}" required>
-                            </div>
+                                <div class="col-4 col-ms-4 mb-1">
+                                    <label for="horafin">Hora fin</label>
+                                    <input type="time" id="horafin" class="form-control" th:field="*{hora_fin}" required>
+                                </div>
 
-                            <div class="col-4 col-ms-4 mb-1">
-                                <label for="especialidad">Especialidad</label>
-                                <input type="text" id="especialidad" class="form-control" th:field="*{especialidad}" required>
-                            </div>
+                                <div class="col-4 col-ms-4 mb-1">
+                                    <label for="odonto">Odontologos</label>
+                                    <select class="form-select" id="odonto">
+                                        <option
+                                                th:each="odont:${doctores}" th:value="${odont.id_Odontologo}" th:text="${odont.nombre}"
+                                        >
+                                        </option>
+                                    </select>
+                                </div>
 
-                            <div class="col-4 mb-1">
-                                <label for="phone">Teléfono</label>
-                                <input type="tel" id="phone" class="form-control" th:field="*{telefono}" required>
-                            </div>
-
+                                <div class="col-4 mb-1">
+                                    <label for="phone">Teléfono</label>
+                                    <input type="tel" id="phone" class="form-control"  required>
+                                </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Registrar</button>
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>
