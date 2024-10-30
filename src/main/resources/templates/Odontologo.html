@@ -22,15 +22,15 @@
 </head>
 <body>
   <header class="container-fluid fondo py-2">
-      <img src="../static/img/imagen.png" alt="Dental Logo" class="logo">
+      <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
       <h1>Diseño Dental</h1>
   </header>
 
   <main class="container-fluid">
       <div class="row">
-          <div class="col-3 bg-info py-2">
+          <div style="background-color: #40E0D0" class="col-2 py-2">
               <div class="container divFotoWelcome">
-                  <img src="../static/img/avatar.png" alt="Profile Picture" class="profile-pic">
+                  <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
                   <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
               </div>
                 <hr>
@@ -47,7 +47,7 @@
                   <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
               </div>
           </div>
-          <div class="col-9">
+          <div class="col-10">
               <div class="container botones mt-3">
                   <h2>Listado de odontólogos</h2>
                   <div>
