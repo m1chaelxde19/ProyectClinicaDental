@@ -1,13 +1,9 @@
 package com.appWeb.ClinicaDental.entidad;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Timestamp;
@@ -73,6 +69,6 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario")
     private Secretario secretario;
 
-    @OneToOne(mappedBy = "usuario")
-    private Paciente paciente;
+    @OneToMany(mappedBy = "usuario")
+    private List<Paciente> pacientes;
 }
