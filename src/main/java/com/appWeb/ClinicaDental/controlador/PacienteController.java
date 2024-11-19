@@ -1,25 +1,22 @@
 package com.appWeb.ClinicaDental.controlador;
 
-import com.appWeb.ClinicaDental.ClinicaDentalApplication;
+import com.appWeb.ClinicaDental.Recursos.PacienteDTO;
 import com.appWeb.ClinicaDental.Recursos.Sesion;
 import com.appWeb.ClinicaDental.entidad.Paciente;
 import com.appWeb.ClinicaDental.servicio.PacienteService;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.aspectj.weaver.patterns.IfPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.sql.Date;
 
 @Controller
 @RequestMapping("/paciente")
@@ -36,6 +33,7 @@ public class PacienteController {
             List<Paciente> listPacienteCOnEdad = pacienteService.listar();
             model.addAttribute("idUser", sesion.getId_usuario());
             model.addAttribute("listPacienteCOnEdad", listPacienteCOnEdad);
+            model.addAttribute("nombre",sesion.getNombre());
             model.addAttribute("paciente", new Paciente());
             return "Paciente";
         }else {
@@ -43,6 +41,62 @@ public class PacienteController {
         }
     }
 
+
+    @GetMapping("/vistaEditPaciente")
+    public String viewPacienteEdit(@RequestParam("asdasaa") Long Idpaciente, Model model) {
+        Paciente oldpaciente = pacienteService.buscar(Idpaciente);
+        model.addAttribute("pacienteOld", oldpaciente);
+        model.addAttribute("pacienteDTO", new PacienteDTO());
+        return "EditPaciente";
+    }
+
+    @PostMapping("/editPaciente")
+    public String editPaciente(
+            @RequestParam("idPaciente") Long id, @RequestParam("nombre") String nombre, @RequestParam("lastName") String apellido,
+            @RequestParam("fecha") Date fechaNacimiento, @RequestParam("dni") String Dni, @RequestParam("celular") String celular,
+            @RequestParam("newDirection") String direccion, @RequestParam("correo") String email,
+            RedirectAttributes model) {
+
+        Map<String,String> errores = new HashMap<>();
+
+        if (nombre.isEmpty() || apellido.isEmpty() || Dni.isEmpty() || celular.isEmpty() || direccion.isEmpty() || email.isEmpty()) {
+            model.addFlashAttribute("errorMessages", "Todos los campos son obligatorios");
+            return "redirect:/paciente/vistaEditPaciente?asdasaa="+id;
+        }
+
+        if (!pacienteService.verificationName(nombre)){errores.put("errorNombre","Solo se permite letras y espacios");}
+        if (!pacienteService.verificationLastName(apellido)){errores.put("errorApellido","Solo se permite letras y espacios");}
+        if (validarFecha(fechaNacimiento)){errores.put("errorFecha","La fecha de nacimiento no puede ser mayor  o igual a la fecha actual");}
+        if (!pacienteService.verificationDni(Dni)){errores.put("errorDni","Solo se ingrese valones numéricos");}
+        if (!pacienteService.verificationPhone(celular)){errores.put("errorCelular","El número de teléfono debe tener 9 dígitos y no debe contener letras");}
+        if (!pacienteService.verificationEmail(email)){errores.put("errorEmail","Formato de correo no válido");}
+        if (!pacienteService.verificationDirection(direccion)){errores.put("errorDireccion","Solo se permite letras y espacios");}
+
+
+
+        if (!errores.isEmpty()){
+            errores.forEach(model::addFlashAttribute);
+            return "redirect:/paciente/vistaEditPaciente?asdasaa="+id;
+        }
+
+            try {
+                pacienteService.updatePaciente(id, nombre, apellido, Dni, fechaNacimiento, celular, email, direccion,model);
+            }catch (IllegalArgumentException e){
+                model.addFlashAttribute("errorMessages", e.getMessage());
+            }
+        return "redirect:/paciente/vistaEditPaciente?asdasaa="+id;
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam("DL_id_paciente") Long id,RedirectAttributes msg){
+        try {
+            pacienteService.eliminarPaciente(id);
+            msg.addFlashAttribute("mensajeConfirmacion","Paciente eliminado correctamente");
+        }catch (Exception e){
+            msg.addFlashAttribute("mensajeError","Hubo un error al tratar de eliminar este paciente");
+        }
+        return "redirect:/paciente";
+    }
     @PostMapping("/pacienteValidation")
     public String formValidation(@Valid @ModelAttribute Paciente paciente, BindingResult result,RedirectAttributes model) {
         boolean fechaInvalida = validarFecha(paciente.getFechaNacimiento());
@@ -52,7 +106,6 @@ public class PacienteController {
             List<String> errorMessages = new ArrayList<>();
 
             result.getFieldErrors().forEach(error -> {
-               //logger.warn(error.getDefaultMessage());
                 errorMessages.add(error.getDefaultMessage());
             });
 
