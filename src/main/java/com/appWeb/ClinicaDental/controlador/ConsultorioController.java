@@ -34,6 +34,7 @@ public class ConsultorioController {
             model.addAttribute("consultorios", consultorios);
             model.addAttribute("consultorio",new Consultorio());
             model.addAttribute("estadosConsultorio", EstadoConsultorio.values());
+            model.addAttribute("nombre",sesion.getNombre());
             return "Consultorio";
         }else {
             return "redirect:/api";

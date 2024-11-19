@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class CitaDTO {
+    Long Id_Cita;
     Date Fecha;
     Time Hora;
     MotivoCita MotivoCita;
@@ -14,7 +15,8 @@ public class CitaDTO {
     String ApellidoOdontologo;
     String Comentarios;
 
-    public CitaDTO(Date fecha, Time hora, MotivoCita motivoCita, String nombreOdontologo, String apellidoOdontologo, String comentarios) {
+    public CitaDTO(Long id_Cita,Date fecha, Time hora, MotivoCita motivoCita, String nombreOdontologo, String apellidoOdontologo, String comentarios) {
+        Id_Cita = id_Cita;
         Fecha = fecha;
         Hora = hora;
         MotivoCita = motivoCita;
@@ -69,5 +71,13 @@ public class CitaDTO {
 
     public void setComentarios(String comentarios) {
         Comentarios = comentarios;
+    }
+
+    public Long getId_Cita() {
+        return Id_Cita;
+    }
+
+    public void setId_Cita(Long id_Cita) {
+        Id_Cita = id_Cita;
     }
 }

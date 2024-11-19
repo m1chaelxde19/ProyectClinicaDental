@@ -1,140 +1,192 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <title>Citas</title>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <title>Citas</title>
   <style>
+    header{
+      display: flex; justify-content: center; align-items: center; gap: 50px;
+    }
+    header img{width: 90px}
+    .fondo{background-color: #BA68C8}
+    .divFotoWelcome{display: flex; justify-content: center;align-items: center;gap:10px}
+    .divFotoWelcome img{width: 50px}
+    h1{color: white}
+
     .botones{display: flex; justify-content: space-between; align-items: center}
   </style>
+  <title>Citas</title>
 </head>
 <body>
-  <div class="container botones">
-    <h1>Citas</h1>
-    <div>
-      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar cita</button>
-      <a class="btn btn-primary" th:href="@{/paciente}">Ver paciente</a>
-    </div>
-  </div>
+<header class="container-fluid fondo py-2">
+  <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
+  <h1>Diseño Dental</h1>
+</header>
 
-  <div class="container">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Fecha</th>
-          <th scope="col">Hora</th>
-          <th scope="col">Motivo de la cita</th>
-          <th scope="col">Odontólogo</th>
-          <th scope="col">Comentarios</th>
-          <th scope="col" >Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="cita: ${citas}">
-          <td th:text="${cita.fecha}"></td>
-          <td th:text="${cita.hora}"></td>
-          <td th:text="${cita.motivoCita}"></td>
-          <td th:text="${cita.nombreOdontologo+' '+cita.apellidoOdontologo}"></td>
-          <td th:text="${cita.comentarios}"></td>
-          <td class="d-flex">
-            <a href="#" class="btn btn-primary">Editar</a>
-            <a href="#" class="btn btn-danger mx-1">Eliminar</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="container">
-    <div th:if="${confirm}" class="bg-primary">
-      <p th:text="${confirm}" style="color: white"></p>
-    </div>
-    <div th:if="${errorCita}" class="bg-danger">
-      <p th:text="${errorCita}" style="color: white"></p>
-    </div>
-  </div>
-
-
-  <div class="modal" id="myModal">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Registro de citas</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <form th:action="@{/cita/saveCita}" method="post">
-            <div class="row">
-              <div class="col-6 col-ms-12 mb-1">
-                <label for="fecha">Fecha</label>
-                <input id="fecha" type="date" class="form-control" name="fecha">
-              </div>
-
-              <div class="col-6 col-ms-12 mb-1">
-                <label for="hora">Hora</label>
-                <input id="hora" type="Time" class="form-control" name="hora" required>
-              </div>
-
-              <div class="col-6 col-ms-6 mb-1">
-                <label for="selecMotivo">Motivo de la cita</label>
-                <select class="form-select" id="selecMotivo" name="motivoCita">
-                 <option th:each="citaEn : ${motivoCitas}"
-                         th:value="${citaEn}"
-                         th:text="${citaEn}">
-                 </option>
-                </select>
-              </div>
-
-              <div class="col-6 col-ms-6 mb-1">
-                <label for="selecEstado">Estado</label>
-                <select class="form-select" id="selecEstado"  name="estado">
-                  <option th:each="citaEnti : ${estados}"
-                          th:value="${citaEnti}"
-                          th:text="${citaEnti}">
-                  </option>
-                </select>
-              </div>
-
-              <!-- Selección del Paciente -->
-              <div class="col-12 mb-1">
-                <label for="paciente">Seleccionar Paciente</label>
-                <select class="form-select" id="paciente" name="paciente">
-                  <option th:each="paciente : ${pacientes}"  th:value="${paciente.id_paciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}">
-                  </option>
-                </select>
-              </div>
-
-              <!-- Selección del Odontólogo -->
-              <div class="col-12 mb-1">
-                <label for="odontologo">Seleccionar Odontólogo</label>
-                <select class="form-select" id="odontologo" name="odontologId">
-                  <option th:each="odontologo : ${odontologos}"
-                          th:value="${odontologo.id_Odontologo}"
-                          th:text="${odontologo.nombre}+' '+${odontologo.apellido}">
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-12 mb-1">
-                <label for="coment" class="form-label">Comentarios</label>
-                <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize: none" name="comentarios"></textarea>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Registrar</button>
-              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-            </div>
-          </form>
-        </div>
+<main class="container-fluid">
+  <div class="row">
+    <div style="background-color: #40E0D0" class="col-2 py-2">
+      <div class="container divFotoWelcome">
+        <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
+        <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
+      </div>
+      <hr>
+      <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
+      <hr>
+      <div class="d-grid gap-1 col-8 mx-auto">
+        <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
+        <a class="btn btn-primary my-2" th:href="@{/paciente}">PACIENTES</a>
+        <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
+        <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
+        <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
+        <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
+        <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
+        <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
       </div>
     </div>
+    <div class="col-10">
+      <div class="container botones">
+        <h2>Listado de Citas</h2>
+        <div>
+          <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar cita</button>
+          <a class="btn btn-primary" th:href="@{/paciente}">Ver paciente</a>
+        </div>
+      </div>
+
+      <div class="container">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+            <th scope="col">Motivo de la cita</th>
+            <th scope="col">Odontólogo</th>
+            <th scope="col">Comentarios</th>
+            <th scope="col" >Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="cita: ${citas}">
+            <td th:text="${cita.fecha}"></td>
+            <td th:text="${cita.hora}"></td>
+            <td th:text="${cita.motivoCita}"></td>
+            <td th:text="${cita.nombreOdontologo+' '+cita.apellidoOdontologo}"></td>
+            <td th:text="${cita.comentarios}"></td>
+            <td class="d-flex">
+              <a th:href="@{/cita/vistaEditCita(idCita=${cita.id_Cita})}" class="btn btn-primary">Editar</a>
+              <button class="btn btn-danger mx-1" th:attr="onclick=|confirmarEliminar(${cita.id_Cita})|">Eliminar</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="container">
+        <div th:if="${confirm}" class="bg-primary">
+          <p th:text="${confirm}" style="color: white"></p>
+        </div>
+        <div th:if="${errorCita}" class="bg-danger">
+          <p th:text="${errorCita}" style="color: white"></p>
+        </div>
+      </div>
+
+
+      <div class="modal" id="myModal">
+        <div class="modal-dialog modal-md">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Registro de citas</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <form th:action="@{/cita/saveCita}" method="post">
+                <div class="row">
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="fecha">Fecha</label>
+                    <input id="fecha" type="date" class="form-control" name="fecha">
+                  </div>
+
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="hora">Hora</label>
+                    <input id="hora" type="Time" class="form-control" name="hora" required>
+                  </div>
+
+                  <div class="col-6 col-ms-6 mb-1">
+                    <label for="selecMotivo">Motivo de la cita</label>
+                    <select class="form-select" id="selecMotivo" name="motivoCita">
+                      <option th:each="citaEn : ${motivoCitas}"
+                              th:value="${citaEn}"
+                              th:text="${citaEn}">
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="col-6 col-ms-6 mb-1">
+                    <label for="selecEstado">Estado</label>
+                    <select class="form-select" id="selecEstado"  name="estado">
+                      <option th:each="citaEnti : ${estados}"
+                              th:value="${citaEnti}"
+                              th:text="${citaEnti}">
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- Selección del Paciente -->
+                  <div class="col-12 mb-1">
+                    <label for="paciente">Seleccionar Paciente</label>
+                    <select class="form-select" id="paciente" name="paciente">
+                      <option th:each="paciente : ${pacientes}"  th:value="${paciente.id_paciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}">
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- Selección del Odontólogo -->
+                  <div class="col-12 mb-1">
+                    <label for="odontologo">Seleccionar Odontólogo</label>
+                    <select class="form-select" id="odontologo" name="odontologId">
+                      <option th:each="odontologo : ${odontologos}"
+                              th:value="${odontologo.id_Odontologo}"
+                              th:text="${odontologo.nombre}+' '+${odontologo.apellido}">
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="col-12 mb-1">
+                    <label for="coment" class="form-label">Comentarios</label>
+                    <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize: none" name="comentarios"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Registrar</button>
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <form id="eliminarForm" th:action="@{/cita/delete}" method="post" style="display: none">
+        <input type="hidden" name="DL_id_cita" id="cita_Id">
+      </form>
+    </div>
   </div>
+</main>
+
+<script th:inline="javascript">
+  function confirmarEliminar(id){
+    if (confirm('¿Estas seguro de eliminar esta cita?')){
+      document.getElementById('cita_Id').value=id;
+      document.getElementById('eliminarForm').submit();
+    }
+  }
+</script>
 </body>
 </html>

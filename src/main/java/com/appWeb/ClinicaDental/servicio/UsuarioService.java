@@ -35,19 +35,17 @@ public class UsuarioService {
     }
 
     public void validarClave(String clave) {
-        Preconditions.checkNotNull(clave,"El campo del correo no puede ser nulo");
+        Preconditions.checkNotNull(clave,"El campo de la clave no puede ser nulo");
         Preconditions.checkArgument(!clave.isEmpty(), "El campo de la contraseña no puede ser vacío");
         Preconditions.checkArgument(!clave.contains(";") || !clave.contains("--") || !clave.contains("<") || !clave.contains(">"),
                 "La contraseña tiene carácteres raros");
     }
 
     public void actualizarClave(String email, String clave) {
-   // logger.info("INFO: Actualizando la contraseña del {}",email);
         try {
             validarClave(clave);
            usuarioReposity.actualizarClave(passCode(clave), email);
         }catch (Exception e){
-         //   logger.error("Error al actualizar la contraseña {}", e.getMessage());
             throw new IllegalArgumentException(e.getMessage());
         }
     }

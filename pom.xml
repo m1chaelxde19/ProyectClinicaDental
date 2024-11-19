@@ -79,7 +79,7 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 			<version>3.3.5</version>
 		</dependency>
-
+<!---Libreria para exportalr excel con apache poi-->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -93,12 +93,14 @@
 			<version>5.3.0</version>
 		</dependency>
 
+		<!--libreria para encriptar la contraseña y precondiciones-->
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>33.3.0-jre</version>
 		</dependency>
 
+		<!---libreria para enviar correo-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-email</artifactId>

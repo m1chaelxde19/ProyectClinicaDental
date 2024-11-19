@@ -6,105 +6,168 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        header{
+            display: flex; justify-content: center; align-items: center; gap: 50px;
+        }
+        header img{width: 90px}
+        .fondo{background-color: #BA68C8}
+        .divFotoWelcome{display: flex; justify-content: center;align-items: center;gap:10px}
+        .divFotoWelcome img{width: 50px}
+        h1{color: white}
+
+        .botones{display: flex; justify-content: space-between; align-items: center}
+    </style>
     <title>Horario</title>
 </head>
 <body>
-<div class="container">
-    <div class="container botones mt-3">
-        <h2>Listado de odontólogos</h2>
-        <div>
-            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Doctor</button>
+<header class="container-fluid fondo py-2">
+    <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
+    <h1>Diseño Dental</h1>
+</header>
+
+<main class="container-fluid">
+    <div class="row">
+        <div style="background-color: #40E0D0" class="col-2 py-2">
+            <div class="container divFotoWelcome">
+                <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
+                <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
+            </div>
+            <hr>
+            <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
+            <hr>
+            <div class="d-grid gap-1 col-8 mx-auto">
+                <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/paciente}">PACIENTES</a>
+                <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
+                <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
+                <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
+            </div>
         </div>
-    </div>
-    <hr>
-    <div class="container mt-3">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">Dia Semana</th>
-                <th scope="col">Hora inicio</th>
-                <th scope="col">Hora fin</th>
-                <th scope="col" >Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="horario: ${horarios}">
-                <td th:text="${horario.dia_semana}"></td>
-                <td th:text="${horario.hora_inicio}"></td>
-                <td th:text="${horario.hora_fin}"></td>
-                <td class="d-flex">
-                    <a href="#" class="btn btn-primary">Editar</a>
-                    <a href="#" class="btn btn-danger mx-1">Eliminar</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <div class="container">
-        <div id="mensajeAdvertencia"></div>
-
-        <div th:if="${mensajeConfirmacion}" class="bg-primary">
-            <p th:text="${mensajeConfirmacion}" style="color: white"></p>
-        </div>
-    </div>
-
-    <div class="modal" id="myModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h4 class="modal-title">Registro de Horarios</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form th:action="@{/horario}" method="post" th:object="${Objthorario}">
-                        <div class="row">
-                                <div class="col-6 col-ms-12 mb-1">
-                                    <label for="selecDia">Día de la semana</label>
-                                    <select class="form-select" id="selecDia" th:field="*{dia_semana}">
-                                        <option
-                                        th:each="dia:${diasSemana}" th:value="${dia}" th:text="${dia}"
-                                        >
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-6 col-ms-12 mb-1">
-                                    <label for="horaini">Hora inicio</label>
-                                    <input id="horaini" type="time" class="form-control" th:field="*{hora_inicio}" required>
-                                </div>
-
-                                <div class="col-4 col-ms-4 mb-1">
-                                    <label for="horafin">Hora fin</label>
-                                    <input type="time" id="horafin" class="form-control" th:field="*{hora_fin}" required>
-                                </div>
-
-                                <div class="col-4 col-ms-4 mb-1">
-                                    <label for="odonto">Odontologos</label>
-                                    <select class="form-select" id="odonto">
-                                        <option
-                                                th:each="odont:${doctores}" th:value="${odont.id_Odontologo}" th:text="${odont.nombre}"
-                                        >
-                                        </option>
-                                    </select>
-                                </div>
-
-                                <div class="col-4 mb-1">
-                                    <label for="phone">Teléfono</label>
-                                    <input type="tel" id="phone" class="form-control"  required>
-                                </div>
-                        </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Registrar</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
-                        </form>
+        <div class="col-10">
+            <div class="container">
+                <div class="container botones mt-3">
+                    <h2>Listado de horario</h2>
+                    <div>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Horario</button>
                     </div>
                 </div>
+                <hr>
+                <div class="container mt-3">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Dia Semana</th>
+                            <th scope="col">Hora inicio</th>
+                            <th scope="col">Hora fin</th>
+                            <th scope="col" >Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr  id="fila-${horario.id_horario}" th:each="horario: ${horarios}">
+                            <td th:text="${horario.dia_semana}"></td>
+                            <td th:text="${horario.hora_inicio}"></td>
+                            <td th:text="${horario.hora_fin}"></td>
+                            <td class="d-flex">
+                                <a th:href="@{/edit/visEdit(idHorario=${horario.id_horario})}" class="btn btn-primary">Editar</a>
+                                <button th:attr="onclick=|confirmarEliminar(${horario.id_horario})|" class="btn btn-danger mx-1">Eliminar</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="container">
+                    <div id="mensajeAdvertencia"></div>
+                    <div th:if="${msgConfirmacion}" class="bg-primary">
+                        <p th:text="${msgConfirmacion}" style="color: white"></p>
+                    </div>
+                    <div th:if="${msg}" class="bg-danger">
+                        <p th:text="${msg}" style="color: white"></p>
+                    </div>
+                </div>
+
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h4 class="modal-title">Registro de Horarios</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form th:action="@{/horario/insert}" method="post" th:object="${Objthorario}">
+                                    <div class="row">
+                                        <div class="col-6 col-ms-12 mb-1">
+                                            <label for="selecDia">Día de la semana</label>
+                                            <select class="form-select" id="selecDia" th:field="*{diaSemana}">
+                                                <option
+                                                        th:each="dia:${diasSemana}" th:value="${dia}" th:text="${dia}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-6 col-ms-12 mb-1">
+                                            <label for="horaini">Hora inicio</label>
+                                            <input id="horaini" type="time" class="form-control" th:field="*{horaInicio}" required>
+                                        </div>
+
+                                        <div class="col-4 col-ms-4 mb-1">
+                                            <label for="horafin">Hora fin</label>
+                                            <input type="time" id="horafin" class="form-control" th:field="*{horaFin}" required>
+                                        </div>
+
+                                        <div class="col-4 col-ms-4 mb-1">
+                                            <label for="odonto">Odontologos</label>
+                                            <select class="form-select" id="odonto" th:field="*{odontologId}">
+                                                <option
+                                                        th:each="odont:${doctores}" th:value="${odont.id_Odontologo}" th:text="${odont.nombre}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-4 mb-1">
+                                            <label for="consult">Consultorios</label>
+                                            <select class="form-select" id="consult" th:field="*{consultorioId}">
+                                                <option
+                                                        th:each="cons:${consultorios}" th:value="${cons.id_consultorio}" th:text="${cons.nombre}"
+                                                >
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Registrar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="eliminarForm" th:action="@{/horario/eliminar}" method="post" style="display: none">
+                    <input type="hidden" name="idHorario" id="horarioId">
+                </form>
             </div>
         </div>
     </div>
+</main>
+
+    <script th:inline="javascript">
+        function confirmarEliminar(id){
+            if (confirm('¿Estas seguro de eliminar este horario?')){
+                document.getElementById('horarioId').value=id;
+                document.getElementById('eliminarForm').submit();
+            }
+        }
+    </script>
 </body>
 </html>

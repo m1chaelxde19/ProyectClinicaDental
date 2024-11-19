@@ -42,7 +42,7 @@ public class Odontologo {
     @Column(name = "fecha_creacion", nullable = false)
     private Timestamp fecha_creacion;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "Usuario_id", nullable = false)
     private Usuario usuario;
 

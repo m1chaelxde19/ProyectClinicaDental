@@ -18,4 +18,8 @@ public class OdontologoService {
     public void guardar(Odontologo odontologo,Long id) {
         odontologoReposity.saveOdontologo(odontologo.getDni(),odontologo.getNombre(),odontologo.getApellido(),odontologo.getEspecialidad(),odontologo.getTelefono(),id);
     }
+
+    public Odontologo findById(Long id) {
+        return odontologoReposity.findById(id).get();
+    }
 }

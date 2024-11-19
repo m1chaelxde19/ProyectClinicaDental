@@ -21,145 +21,146 @@
     <title>Odontólogos</title>
 </head>
 <body>
-  <header class="container-fluid fondo py-2">
-      <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
-      <h1>Diseño Dental</h1>
-  </header>
+<header class="container-fluid fondo py-2">
+    <img th:src="@{/img/imagen.png}" alt="Dental Logo" class="logo">
+    <h1>Diseño Dental</h1>
+</header>
 
-  <main class="container-fluid">
-      <div class="row">
-          <div class="col-3 bg-info py-2">
-              <div class="container divFotoWelcome">
-                  <img th:src="@{/img/avatar.png}" alt="Profile Picture" class="profile-pic">
-                  <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
-              </div>
-                <hr>
-              <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
-              <hr>
-              <div class="d-grid gap-1 col-8 mx-auto">
-                  <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
-                  <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
-                  <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
-                  <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
-                  <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
-                  <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
-                  <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
-              </div>
-          </div>
-          <div class="col-9">
-              <div class="container botones mt-3">
-                  <h2>Listado de odontólogos</h2>
-                  <div>
-                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Doctor</button>
-                  </div>
-              </div>
-                <hr>
-              <div class="container mt-3">
-                  <table class="table table-bordered">
-                      <thead>
-                      <tr>
-                          <th scope="col">DNI</th>
-                          <th scope="col">Nombres y Apellidos</th>
-                          <th scope="col">Especialidad</th>
-                          <th scope="col">Teléfono</th>
-                          <th scope="col" >Acciones</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr th:each="odontologo: ${odontologos}">
-                          <td th:text="${odontologo.dni}"></td>
-                          <td th:text="${odontologo.nombre}"></td>
-                          <td th:text="${odontologo.apellido}"></td>
-                          <td th:text="${odontologo.especialidad}"></td>
-                          <td th:text="${odontologo.telefono}"></td>
-                          <td class="d-flex">
-                              <a href="#" class="btn btn-primary">Editar</a>
-                              <a href="#" class="btn btn-danger mx-1">Eliminar</a>
-                          </td>
-                      </tr>
-                      </tbody>
-                  </table>
-              </div>
+<main class="container-fluid">
+    <div class="row">
+        <div style="background-color: #40E0D0" class="col-2 py-2">
+            <div class="container divFotoWelcome">
+                <img th:src="@{img/avatar.png}" alt="Profile Picture" class="profile-pic">
+                <div class="welcome" style="font-size: 20px">BIENVENIDA <span th:text="${nombre}"></span></div>
+            </div>
+            <hr>
+            <h2 class="panel-title text-center" style="font-size: 25px">PANEL DE CONTROL</h2>
+            <hr>
+            <div class="d-grid gap-1 col-8 mx-auto">
+                <a class="btn btn-primary my-2" href="#">ADMINISTRADORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/paciente}">PACIENTES</a>
+                <a class="btn btn-primary my-2" th:href="@{/cita}">CITAS</a>
+                <a class="btn btn-primary my-2" th:href="@{/consultorio}">CONSULTORIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/doctor}">DOCTORES</a>
+                <a class="btn btn-primary my-2" th:href="@{/horario}">HORARIOS</a>
+                <a class="btn btn-primary my-2" th:href="@{/reporte}">REPORTE</a>
+                <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
+            </div>
+        </div>
+        <div class="col-10">
+            <div class="container botones mt-3">
+                <h2>Listado de Odontólogos</h2>
+                <div>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar Doctor</button>
+                </div>
+            </div>
+            <hr>
+            <div class="container mt-3">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">DNI</th>
+                        <th scope="col">Nombres y Apellidos</th>
+                        <th scope="col">Especialidad</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col" >Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="odontologo: ${odontologos}">
+                        <td th:text="${odontologo.dni}"></td>
+                        <td th:text="${odontologo.nombre}"></td>
+                        <td th:text="${odontologo.apellido}"></td>
+                        <td th:text="${odontologo.especialidad}"></td>
+                        <td th:text="${odontologo.telefono}"></td>
+                        <td class="d-flex">
+                            <a href="#" class="btn btn-primary">Editar</a>
+                            <a href="#" class="btn btn-danger mx-1">Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-              <div class="container">
-                  <div id="mensajeAdvertencia"></div>
+            <div class="container">
+                <div id="mensajeAdvertencia"></div>
 
-                  <div th:if="${mensajeConfirmacion}" class="bg-primary">
-                      <p th:text="${mensajeConfirmacion}" style="color: white"></p>
-                  </div>
-              </div>
+                <div th:if="${mensajeConfirmacion}" class="bg-primary">
+                    <p th:text="${mensajeConfirmacion}" style="color: white"></p>
+                </div>
+            </div>
 
-              <div class="modal" id="myModal">
-                  <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
+            <div class="modal" id="myModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
 
-                          <div class="modal-header">
-                              <h4 class="modal-title">Registro de consultorio</h4>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                          </div>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Registro de Odontologo</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                          <div class="modal-body">
-                              <form th:action="@{/doctor}" method="post" th:object="${odontologo}">
-                                  <div class="row">
-                                      <div class="col-6 col-ms-12 mb-1">
-                                          <label for="dni">DNI</label>
-                                          <input id="dni" type="text" class="form-control" th:field="*{dni}" required>
-                                      </div>
+                        <div class="modal-body">
+                            <form th:action="@{/doctor}" method="post" th:object="${odontologo}">
+                                <div class="row">
+                                    <div class="col-6 col-ms-12 mb-1">
+                                        <label for="dni">DNI</label>
+                                        <input id="dni" type="text" class="form-control" th:field="*{dni}" required>
+                                    </div>
 
-                                      <div class="col-6 col-ms-12 mb-1">
-                                          <label for="nombres">Nombres</label>
-                                          <input id="nombres" type="text" class="form-control" th:field="*{nombre}" required>
-                                      </div>
+                                    <div class="col-6 col-ms-12 mb-1">
+                                        <label for="nombres">Nombres</label>
+                                        <input id="nombres" type="text" class="form-control" th:field="*{nombre}" required>
+                                    </div>
 
-                                      <div class="col-4 col-ms-4 mb-1">
-                                          <label for="apellidos">Apellidos</label>
-                                          <input type="text" id="apellidos" class="form-control" th:field="*{apellido}" required>
-                                      </div>
+                                    <div class="col-4 col-ms-4 mb-1">
+                                        <label for="apellidos">Apellidos</label>
+                                        <input type="text" id="apellidos" class="form-control" th:field="*{apellido}" required>
+                                    </div>
 
-                                      <div class="col-4 col-ms-4 mb-1">
-                                          <label for="especialidad">Especialidad</label>
-                                          <input type="text" id="especialidad" class="form-control" th:field="*{especialidad}" required>
-                                      </div>
+                                    <div class="col-4 col-ms-4 mb-1">
+                                        <label for="especialidad">Especialidad</label>
+                                        <input type="text" id="especialidad" class="form-control" th:field="*{especialidad}" required>
+                                    </div>
 
-                                      <div class="col-4 mb-1">
-                                          <label for="phone">Teléfono</label>
-                                          <input type="tel" id="phone" class="form-control" th:field="*{telefono}" required>
-                                      </div>
+                                    <div class="col-4 mb-1">
+                                        <label for="phone">Teléfono</label>
+                                        <input type="tel" id="phone" class="form-control" th:field="*{telefono}" required>
+                                    </div>
 
-                                  </div>
-                                  <div class="modal-footer">
-                                      <button type="submit" class="btn btn-primary">Registrar</button>
-                                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                                  </div>
-                              </form>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </main>
-  <script th:inline="javascript">
-      document.addEventListener("DOMContentLoaded",function (){
-          let errorMessages = /*[[${errores}]]*/ [];
-          setTimeout(function (){
-              if (errorMessages.length > 0) {
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Registrar</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded",function (){
+        let errorMessages = /*[[${errores}]]*/ [];
+        setTimeout(function (){
+            if (errorMessages.length > 0) {
 
-                  // Crear una lista de errores
-                  let ul = document.createElement('ul');
-                  ul.id = 'errorList';
+                // Crear una lista de errores
+                let ul = document.createElement('ul');
+                ul.id = 'errorList';
 
-                  errorMessages.forEach(function(message) {
-                      let li = document.createElement('li');
-                      li.textContent = message;
-                      ul.appendChild(li);
-                  });
+                errorMessages.forEach(function(message) {
+                    let li = document.createElement('li');
+                    li.textContent = message;
+                    ul.appendChild(li);
+                });
 
-                  // Insertar la lista en el div #mensajeAdvertencia
-                  document.getElementById('mensajeAdvertencia').appendChild(ul);
-              }
-          },100);
-      });
-  </script>
+                // Insertar la lista en el div #mensajeAdvertencia
+                document.getElementById('mensajeAdvertencia').appendChild(ul);
+            }
+        },100);
+    });
+</script>
 </body>
 </html>

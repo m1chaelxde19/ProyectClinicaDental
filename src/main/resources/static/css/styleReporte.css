@@ -25,10 +25,10 @@
     font-weight: bold;
 }
 
-.container {
-    display: flex;
-    height: calc(100vh - 72px);
-}
+/*.container {*/
+/*    display: flex;*/
+/*    height: calc(100vh - 72px);*/
+/*}*/
 
 .sidebar {
     background-color: #40E0D0;

@@ -38,7 +38,6 @@ public class Horario {
     @LastModifiedDate
     private Timestamp fecha_actualizacion;
 
-
     @OneToMany(mappedBy = "horario")
     private List<Cita> citas;
 

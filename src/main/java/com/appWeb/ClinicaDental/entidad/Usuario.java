@@ -63,8 +63,8 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     private List<Bitacora> bitacoras;
 
-    @OneToOne(mappedBy = "usuario")
-    private Odontologo odontologo;
+    @OneToMany(mappedBy = "usuario")
+    private List<Odontologo> odontologos;
 
     @OneToOne(mappedBy = "usuario")
     private Secretario secretario;

@@ -1,7 +1,6 @@
 package com.appWeb.ClinicaDental.servicio;
 
 import com.appWeb.ClinicaDental.Recursos.ExportService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -44,7 +43,7 @@ public class ExcelExportService implements ExportService {
                 workbook.write(fileOut);
             }
             //log.info("Se ha exportado un archivo Excel en la ruta {}", destino.toAbsolutePath().toString());
-            redirectAttributes.addFlashAttribute("message", "Cita exportada con éxito");
+            redirectAttributes.addFlashAttribute("message", "Registro de citas exportado con exito");
         } catch (Exception e) {
            // log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("message", "Error en la exportación");

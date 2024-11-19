@@ -20,4 +20,8 @@ public class ConsultorioService {
         consultorioReposity.saveConsultorio(consultorio.getNombre(),consultorio.getCapacidad(),consultorio.getTelefono(),
                 consultorio.getDireccion(),consultorio.getEstado().name());
     }
+
+    public Consultorio getConsultorio(Long id){
+        return consultorioReposity.findById(id).get();
+    }
 }

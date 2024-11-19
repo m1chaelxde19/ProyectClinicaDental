@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 public interface CitaProyection {
+    Long getId_cita();
     Date getFecha();
     Time getHora();
     MotivoCita getMotivoCita();

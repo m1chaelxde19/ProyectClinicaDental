@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>Edit|Horario</title>
+</head>
+<body>
+<div class="container mt-5" style="width: 700px; height: 500px">
+    <form th:action="@{/cita/citaEdit}" method="post">
+        <input type="hidden" id="ed_citaId" th:value="${idCita}" name="id_cita">
+        <div class="row">
+            <div class="col-6 col-ms-12 mb-1">
+                <label for="fecha">Fecha</label>
+                <input id="fecha" type="date" class="form-control" name="fecha" th:value="${cita.fecha}" required>
+            </div>
+
+            <div class="col-6 col-ms-12 mb-1">
+                <label for="hora">Hora</label>
+                <input id="hora" type="Time" class="form-control" name="hora" th:value="${cita.hora}" required>
+            </div>
+
+            <div class="col-6 col-ms-6 mb-1">
+                <label for="selecMotivo">Motivo de la cita</label>
+                <select class="form-select" id="selecMotivo" name="motivoCita">
+                    <option th:each="citaEn : ${motivoCitas}"
+                            th:value="${citaEn}"
+                            th:text="${citaEn}" th:selected="${citaEn==cita.motivo_cita}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-6 col-ms-6 mb-1">
+                <label for="selecEstado">Estado</label>
+                <select class="form-select" id="selecEstado"  name="estado">
+                    <option th:each="citaEnti : ${estados}"
+                            th:value="${citaEnti}"
+                            th:text="${citaEnti}" th:selected="${citaEnti==cita.estado}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Selección del Paciente -->
+            <div class="col-12 mb-1">
+                <label for="paciente">Seleccionar Paciente</label>
+                <select class="form-select" id="paciente" name="Id_paciente">
+                    <option th:each="paciente : ${pacientes}"
+                            th:value="${paciente.id_paciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}"
+                            th:selected="${paciente.id_paciente==pacienteSeleccionado.id_paciente}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Selección del Odontólogo -->
+            <div class="col-12 mb-1">
+                <label for="odontologo">Seleccionar Odontólogo</label>
+                <select class="form-select" id="odontologo" name="odontologId">
+                    <option th:each="odontologo : ${odontologos}"
+                            th:value="${odontologo.id_Odontologo}"
+                            th:text="${odontologo.nombre}+' '+${odontologo.apellido}" th:selected="${odontologo.id_Odontologo==odontologoSeleccionado.id_Odontologo}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 mb-1">
+                <label for="coment" class="form-label">Comentarios</label>
+                <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize: none" name="comentarios" th:text="${cita.comentarios}"></textarea>
+            </div>
+        </div>
+        <div class="col-12 mt-3 text-end">
+            <button type="submit" class="btn btn-primary">Editar</button>
+            <a th:href="@{/cita}" class="btn btn-danger">Regresar</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
