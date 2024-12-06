@@ -48,57 +48,87 @@
         <a class="btn btn-primary my-2" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
       </div>
     </div>
-    <div class="col-10">
+    <div class="col-10 p-2">
       <div class="container botones">
         <h2>Listado de Citas</h2>
+        <div class="row">
+          <div class="col-6">
+            <label for="filtradoDatos">Filtrar cita</label>
+            <select class="form-select" id="filtradoDatos">
+              <option value="">Elegir un estado</option>
+              <option value="Pendiente">Pendiente</option>
+              <option value="Confirmada">Confirmada</option>
+              <option value="Cancelada">Cancelada</option>
+              <option value="Realizada">Realizada</option>
+              <option value="No_asistio">No_asistio</option>
+            </select>
+          </div>
+          <div class="col-6">
+              <label for="filtrarFecha">Filtrar cita</label>
+              <input type="date" name="fechaFiltro" class="form-control" id="filtrarFecha">
+          </div>
+          <div class="mt-2 d-flex justify-content-center">
+            <button type="button" class="btn btn-primary" th:onclick="filtrarCitas()">Filtrar Citas</button>
+          </div>
+        </div>
+
+
         <div>
-          <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#myModal">Registrar cita</button>
-          <a class="btn btn-primary" th:href="@{/paciente}">Ver paciente</a>
+          <button class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#myModal">Registrar cita</button>
+          <a class="btn btn-success" th:href="@{/paciente}">Ver paciente</a>
         </div>
       </div>
-
+      <hr>
       <div class="container">
         <table class="table table-bordered">
           <thead>
           <tr>
+            <th scope="col">Paciente</th>
             <th scope="col">Fecha</th>
             <th scope="col">Hora</th>
+            <th scope="col">Hora Fin</th>
             <th scope="col">Motivo de la cita</th>
             <th scope="col">Odontólogo</th>
             <th scope="col">Comentarios</th>
             <th scope="col" >Acciones</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody id="tablaCitas">
           <tr th:each="cita: ${citas}">
+            <td th:text="${cita.paciente.nombre}"></td>
             <td th:text="${cita.fecha}"></td>
             <td th:text="${cita.hora}"></td>
-            <td th:text="${cita.motivoCita}"></td>
-            <td th:text="${cita.nombreOdontologo+' '+cita.apellidoOdontologo}"></td>
+            <td th:text="${cita.horaFin}"></td>
+            <td th:text="${cita.motivo_cita}"></td>
+            <td th:text="${cita.horario.odontologo.nombre}"></td>
             <td th:text="${cita.comentarios}"></td>
             <td class="d-flex">
-              <a th:href="@{/cita/vistaEditCita(idCita=${cita.id_Cita})}" class="btn btn-primary">Editar</a>
-              <button class="btn btn-danger mx-1" th:attr="onclick=|confirmarEliminar(${cita.id_Cita})|">Eliminar</button>
+              <button class="btn btn-primary editar-cita" data-bs-toggle="modal"
+                      data-bs-target="#modalEdit" data-th-id="${cita.idCita}" th:attr="onclick=|editarCita(${cita.idCita})|">Editar</button>
+              <button class="btn btn-danger mx-1" th:attr="onclick=|darDeBaja(${cita.idCita})|">Atendida</button>
             </td>
           </tr>
           </tbody>
         </table>
+        <nav aria-label="Pagination-citas">
+          <ul class="pagination justify-content-center">
+            <li th:if="${currentPage > 0}" class="page-item"><a class="page-link" th:href="@{/cita(page=${currentPage - 1})}">Anterior</a></li>
+            <li th:each="i : ${#numbers.sequence(0,totalPages - 1)}" class="page-item" th:classappend="${i == currentPage? 'active' :''}">
+              <a class="page-link" th:href="@{/cita(page=${i})}" th:text="${i + 1}"></a></li>
+            <li th:if="${currentPage + 1 < totalPages}" class="page-item">
+              <a class="page-link" th:href="@{/cita(page=${currentPage + 1})}">Siguiente</a></li>
+          </ul>
+        </nav>
       </div>
 
       <div class="container">
-        <div th:if="${confirm}" class="bg-primary">
-          <p th:text="${confirm}" style="color: white"></p>
-        </div>
-        <div th:if="${errorCita}" class="bg-danger">
-          <p th:text="${errorCita}" style="color: white"></p>
-        </div>
+        <div th:if="${confirm}" th:text="${confirm}" class="alert alert-primary text-center"></div>
+        <div th:if="${errorCita}" th:text="${errorCita}" class="alert alert-danger text-center"></div>
       </div>
 
-
       <div class="modal" id="myModal">
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-xl">
           <div class="modal-content">
-
             <!-- Modal Header -->
             <div class="modal-header">
               <h4 class="modal-title">Registro de citas</h4>
@@ -107,61 +137,91 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-              <form th:action="@{/cita/saveCita}" method="post">
+              <form id="searchPatientForm">
+                <div class="mb-3">
+                  <label for="searchInput" class="form-label">Buscar Paciente</label>
+                  <input type="text" id="searchInput" class="form-control" placeholder="Nombre del paciente" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+              </form>
+              <hr>
+
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th>DNI</th>
+                  <th>Nombres</th>
+                  <th>Apellidos</th>
+                  <th>Email</th>
+                  <th>Fecha Nacimiento</th>
+                  <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="tablaRegister">
+                <tr>
+                  <td colspan="4">Realiza una búsqueda para mostrar resultados.</td>
+                </tr>
+                </tbody>
+              </table>
+
+              <p id="selectedPatient" class="mt-3"></p>
+              <div id="pacienteError" style="color: red"></div>
+              <hr>
+              <form th:action="@{/cita/saveCita}" method="post" id="formCita">
                 <div class="row">
+                  <input type="hidden" id="idHorario" name="idHorario">
+                  <input type="hidden" id="patientIdInput" name="patientId">
                   <div class="col-6 col-ms-12 mb-1">
                     <label for="fecha">Fecha</label>
-                    <input id="fecha" type="date" class="form-control" name="fecha">
+                    <input id="fecha" type="date" class="form-control" name="fecha" required>
+                    <div id="errorFecha"></div>
                   </div>
-
                   <div class="col-6 col-ms-12 mb-1">
                     <label for="hora">Hora</label>
                     <input id="hora" type="Time" class="form-control" name="hora" required>
+                    <div id="errorHora"></div>
+                  </div>
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="horaAprox">Tiempo aproximado de atención</label>
+                    <input id="horaAprox" type="Time" class="form-control" name="horaFin">
                   </div>
 
                   <div class="col-6 col-ms-6 mb-1">
                     <label for="selecMotivo">Motivo de la cita</label>
-                    <select class="form-select" id="selecMotivo" name="motivoCita">
+                    <select class="form-select" id="selecMotivo" name="motivoCita" required>
                       <option th:each="citaEn : ${motivoCitas}"
                               th:value="${citaEn}"
                               th:text="${citaEn}">
                       </option>
                     </select>
+                    <div id="errorMotivo"></div>
                   </div>
-
                   <div class="col-6 col-ms-6 mb-1">
                     <label for="selecEstado">Estado</label>
-                    <select class="form-select" id="selecEstado"  name="estado">
+                    <select class="form-select" id="selecEstado"  name="estado" required>
                       <option th:each="citaEnti : ${estados}"
                               th:value="${citaEnti}"
                               th:text="${citaEnti}">
                       </option>
                     </select>
+                    <div id="errorEstado"></div>
                   </div>
-
-                  <!-- Selección del Paciente -->
-                  <div class="col-12 mb-1">
-                    <label for="paciente">Seleccionar Paciente</label>
-                    <select class="form-select" id="paciente" name="paciente">
-                      <option th:each="paciente : ${pacientes}"  th:value="${paciente.id_paciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}">
-                      </option>
-                    </select>
-                  </div>
-
                   <!-- Selección del Odontólogo -->
-                  <div class="col-12 mb-1">
+                  <div class="col-6 mb-1">
                     <label for="odontologo">Seleccionar Odontólogo</label>
                     <select class="form-select" id="odontologo" name="odontologId">
                       <option th:each="odontologo : ${odontologos}"
                               th:value="${odontologo.id_Odontologo}"
-                              th:text="${odontologo.nombre}+' '+${odontologo.apellido}">
+                              th:text="${odontologo.nombre}+' '+${odontologo.apellido}+' '+${odontologo.hora_Inicio}+' '+${odontologo.hora_Fin}">
                       </option>
                     </select>
+                    <div id="errorOdontologo"></div>
                   </div>
-
                   <div class="col-12 mb-1">
                     <label for="coment" class="form-label">Comentarios</label>
-                    <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize: none" name="comentarios"></textarea>
+                    <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize:
+                    none" name="comentarios" th:text="${comentar}"></textarea>
+                    <div id="errorComentarios"></div>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -173,6 +233,121 @@
           </div>
         </div>
       </div>
+
+      <div class="modal" id="modalEdit">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Editar cita</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div>
+                <form id="searchPatientFormEdit">
+                  <div class="mb-3">
+                    <label for="buscarInput" data-id="pacienteEdit" class="form-label">Buscar Paciente editar</label>
+                    <input type="text" id="buscarInput" class="form-control" placeholder="Nombre del paciente" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Buscar</button>
+                </form>
+              <hr>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>DNI</th>
+                      <th>Nombres</th>
+                      <th>Apellidos</th>
+                      <th>Email</th>
+                      <th>Fecha Nacimiento</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableEdit">
+                  <tr>
+                    <td colspan="4">Realiza una búsqueda para mostrar resultados.</td>
+                  </tr>
+                  </tbody>
+              </table>
+              </div>
+              <p id="selecPatient" class="mt-3"></p>
+              <div id="errorPaciente" style="color: red"></div>
+              <hr>
+              <form id="formEdit" method="post" th:action="@{/cita/citaEdit}">
+                <input type="hidden" name="pacienteEdit" id="idPacienteEd">
+                <input type="hidden" name="horarioId" id="horarioId">
+                <input type="hidden" id="ed_citaId" name="id_cita">
+                <div class="row">
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="nuevaFecha">Fecha</label>
+                    <input id="nuevaFecha" type="date" class="form-control" name="fecha"  required>
+                    <div id="fechaError"></div>
+                  </div>
+
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="nuevahora">Hora</label>
+                    <input id="nuevahora" type="Time" class="form-control" name="hora" required>
+                    <div id="horaError"></div>
+                  </div>
+
+                  <div class="col-6 col-ms-12 mb-1">
+                    <label for="nueHoraFin">Hora Fin de atencion</label>
+                    <input id="nueHoraFin" type="Time" class="form-control" name="newHorusEnd">
+                    <div id="horaErrorFin"></div>
+                  </div>
+
+                  <div class="col-6 col-ms-6 mb-1">
+                    <label for="EselecMotivo">Motivo de la cita</label>
+                    <select class="form-select" id="EselecMotivo" name="motivoCita">
+                      <option th:each="citaEn : ${motivoCitas}"
+                              th:value="${citaEn}" th:text="${citaEn}">
+                      </option>
+                    </select>
+                    <div id="motivoError"></div>
+                  </div>
+
+                  <div class="col-6 col-ms-6 mb-1">
+                    <label for="Edestado">Estado</label>
+                    <select class="form-select" id="Edestado"  name="estado">
+                      <option th:each="citaEnti : ${estados}"
+                              th:value="${citaEnti}"
+                              th:text="${citaEnti}">
+                      </option>
+                    </select>
+                    <div id="estadoError"></div>
+                  </div>
+
+                  <!-- Selección del Odontólogo -->
+                  <div class="col-12 mb-1">
+                    <label for="Eodontologo">Seleccionar Odontólogo</label>
+                    <select class="form-select" id="Eodontologo" name="odontologId">
+                      <option th:each="odontologo : ${odontologos}"
+                              th:value="${odontologo.id_Odontologo}"
+                              th:text="${odontologo.nombre}+' '+${odontologo.apellido}">
+                      </option>
+                    </select>
+                    <div id="odontoError"></div>
+                  </div>
+
+                  <div class="col-12 mb-1">
+                    <label for="nuevocoment" class="form-label">Comentarios</label>
+                    <textarea class="form-control"  id="nuevocoment"
+                              rows="3" placeholder="Opcional" style="resize: none" name="comentarios"></textarea>
+                    <div id="comentError"></div>
+                  </div>
+                </div>
+                <div class="col-12 mt-3 text-end">
+                  <button type="submit" class="btn btn-primary">Editar</button>
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <form id="eliminarForm" th:action="@{/cita/delete}" method="post" style="display: none">
         <input type="hidden" name="DL_id_cita" id="cita_Id">
       </form>
@@ -180,13 +355,8 @@
   </div>
 </main>
 
-<script th:inline="javascript">
-  function confirmarEliminar(id){
-    if (confirm('¿Estas seguro de eliminar esta cita?')){
-      document.getElementById('cita_Id').value=id;
-      document.getElementById('eliminarForm').submit();
-    }
-  }
-</script>
+<script th:src="@{js/BuscarPaciente.js}"></script>
+<script th:src="@{js/validarCita.js}"></script>
+<script th:src="@{js/edit.js}"></script>
 </body>
 </html>

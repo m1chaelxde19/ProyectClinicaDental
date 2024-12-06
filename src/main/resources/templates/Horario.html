@@ -62,6 +62,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Dia Semana</th>
+                            <th scope="col">Odontologo</th>
                             <th scope="col">Hora inicio</th>
                             <th scope="col">Hora fin</th>
                             <th scope="col" >Acciones</th>
@@ -70,6 +71,7 @@
                         <tbody>
                         <tr  id="fila-${horario.id_horario}" th:each="horario: ${horarios}">
                             <td th:text="${horario.dia_semana}"></td>
+                            <td th:text="${horario.odontologo.nombre}+' '+${horario.odontologo.apellido}"></td>
                             <td th:text="${horario.hora_inicio}"></td>
                             <td th:text="${horario.hora_fin}"></td>
                             <td class="d-flex">
@@ -107,8 +109,7 @@
                                             <label for="selecDia">Día de la semana</label>
                                             <select class="form-select" id="selecDia" th:field="*{diaSemana}">
                                                 <option
-                                                        th:each="dia:${diasSemana}" th:value="${dia}" th:text="${dia}"
-                                                >
+                                                        th:each="dia:${diasSemana}" th:value="${dia}" th:text="${dia}">
                                                 </option>
                                             </select>
                                         </div>
@@ -127,7 +128,9 @@
                                             <label for="odonto">Odontologos</label>
                                             <select class="form-select" id="odonto" th:field="*{odontologId}">
                                                 <option
-                                                        th:each="odont:${doctores}" th:value="${odont.id_Odontologo}" th:text="${odont.nombre}"
+                                                        th:each="odont:${doctores}"
+                                                        th:value="${odont.id_Odontologo}"
+                                                        th:text="${odont.nombre}+' '+${odont.apellido}"
                                                 >
                                                 </option>
                                             </select>

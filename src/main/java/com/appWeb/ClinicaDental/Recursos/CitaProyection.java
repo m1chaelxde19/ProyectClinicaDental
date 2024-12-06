@@ -10,7 +10,8 @@ public interface CitaProyection {
     Date getFecha();
     Time getHora();
     MotivoCita getMotivoCita();
-    String getNombre();
-    String getApellido();
+    String getDoctor();
     String getComentarios();
+    String getPaciente();
+    Time getHoraFin();
 }

@@ -45,6 +45,9 @@ public class HorarioService {
         }catch (Exception e) {
             msg.addFlashAttribute("msg", "Error al actualizar el horario");
         }
+    }
 
+    public Horario getHorarioOdontologo(Long idOdontologo) {
+        return horarioReposity.getHorario(idOdontologo);
     }
 }

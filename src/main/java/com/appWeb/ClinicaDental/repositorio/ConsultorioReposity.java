@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface ConsultorioReposity extends JpaRepository<Consultorio, Long> {
     @Modifying
@@ -17,4 +19,6 @@ public interface ConsultorioReposity extends JpaRepository<Consultorio, Long> {
     void saveConsultorio(
             @Param("Cnombre")String Cnombre, @Param("Ccapacidad")Integer Ccapacidad, @Param("Ctelefono")String Ctelefono,
             @Param("Cdireccion") String Cdireccion, @Param("Cestado")String Cestado);
+
+    List<Consultorio> findByEstado(EstadoConsultorio estado);
 }

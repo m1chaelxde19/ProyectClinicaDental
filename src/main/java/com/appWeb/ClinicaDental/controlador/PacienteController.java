@@ -6,9 +6,7 @@ import com.appWeb.ClinicaDental.entidad.Paciente;
 import com.appWeb.ClinicaDental.servicio.PacienteService;
 
 import jakarta.validation.Valid;
-import org.aspectj.weaver.patterns.IfPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +28,7 @@ public class PacienteController {
     @GetMapping()
     public String paciente(Model model) {
         if (sesion.isLogged()) {
-            List<Paciente> listPacienteCOnEdad = pacienteService.listar();
+            List<Paciente> listPacienteCOnEdad = pacienteService.listarPacientesActivos();
             model.addAttribute("idUser", sesion.getId_usuario());
             model.addAttribute("listPacienteCOnEdad", listPacienteCOnEdad);
             model.addAttribute("nombre",sesion.getNombre());
@@ -72,8 +70,6 @@ public class PacienteController {
         if (!pacienteService.verificationEmail(email)){errores.put("errorEmail","Formato de correo no válido");}
         if (!pacienteService.verificationDirection(direccion)){errores.put("errorDireccion","Solo se permite letras y espacios");}
 
-
-
         if (!errores.isEmpty()){
             errores.forEach(model::addFlashAttribute);
             return "redirect:/paciente/vistaEditPaciente?asdasaa="+id;
@@ -90,7 +86,7 @@ public class PacienteController {
     @PostMapping("/delete")
     public String delete(@RequestParam("DL_id_paciente") Long id,RedirectAttributes msg){
         try {
-            pacienteService.eliminarPaciente(id);
+            pacienteService.actualizarEstadoInactivo(id);
             msg.addFlashAttribute("mensajeConfirmacion","Paciente eliminado correctamente");
         }catch (Exception e){
             msg.addFlashAttribute("mensajeError","Hubo un error al tratar de eliminar este paciente");
@@ -114,10 +110,13 @@ public class PacienteController {
             }
 
             model.addFlashAttribute("errorMessages", errorMessages);
-        }else {
-            pacienteService.savePaciente(paciente, sesion.getId_usuario());
-            model.addFlashAttribute("mensajeConfirmacion", "Paciente guardado correctamente");
-        }
+        } {
+          if (pacienteService.savePaciente(paciente, sesion.getId_usuario()) == 1) {
+                model.addFlashAttribute("mensajeConfirmacion", "Paciente guardado correctamente");
+            }else {
+                model.addFlashAttribute("mensajeError", "El paciente ya existe");
+            }
+     }
         return "redirect:/paciente";
     }
 

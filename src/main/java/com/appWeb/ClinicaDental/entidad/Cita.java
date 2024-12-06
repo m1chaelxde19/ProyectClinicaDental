@@ -13,7 +13,7 @@ public class Cita {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cita")
-    private Long id_cita;
+    private Long idCita;
 
     @Column(name = "fecha", nullable = false)
     private Date fecha;
@@ -45,4 +45,19 @@ public class Cita {
 
     @OneToOne(mappedBy = "cita")
     private Pago pago;
+
+    @Column(name = "hora_Fin")
+    private Time horaFin;
+
+    @Override
+    public String toString() {
+        return "Cita{" +
+                "idCita=" + idCita +
+                ", fecha=" + fecha +
+                ", hora=" + hora +
+                ", estado=" + estado +
+                ", motivo_cita=" + motivo_cita +
+                ", comentarios='" + comentarios + '\'' +
+                '}';
+    }
 }
