@@ -21,10 +21,12 @@
         <h2 class="panel-title">PANEL DE CONTROL</h2>
         <a class="menu-button" href="#">ADMINISTRADORES</a>
         <a class="menu-button" th:href="@{/cita}">CITAS</a>
+        <a class="menu-button" th:href="@{/paciente}">Pacientes</a>
         <a class="menu-button" th:href="@{/consultorio}">CONSULTORIOS</a>
         <a class="menu-button" th:href="@{/doctor}">DOCTORES</a>
         <a class="menu-button" th:href="@{/horario}">HORARIOS</a>
         <a class="menu-button" th:href="@{/reporte}">REPORTE</a>
+        <a class="menu-button" th:href="@{/pacienteApi/agrePaciente}">Paciente add</a>
         <a class="menu-button" th:if="${nombre!=null}" th:href="@{/api/logout}">CERRAR SESION</a>
     </aside>
 

@@ -48,8 +48,8 @@
                 <label for="paciente">Seleccionar Paciente</label>
                 <select class="form-select" id="paciente" name="Id_paciente">
                     <option th:each="paciente : ${pacientes}"
-                            th:value="${paciente.id_paciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}"
-                            th:selected="${paciente.id_paciente==pacienteSeleccionado.id_paciente}">
+                            th:value="${paciente.idPaciente}" th:text="${paciente.nombre} + ' '+${paciente.apellido}"
+                            th:selected="${paciente.idPaciente==pacienteSeleccionado.idPaciente}">
                     </option>
                 </select>
             </div>
@@ -60,19 +60,21 @@
                 <select class="form-select" id="odontologo" name="odontologId">
                     <option th:each="odontologo : ${odontologos}"
                             th:value="${odontologo.id_Odontologo}"
-                            th:text="${odontologo.nombre}+' '+${odontologo.apellido}" th:selected="${odontologo.id_Odontologo==odontologoSeleccionado.id_Odontologo}">
+                            th:text="${odontologo.nombre}+' '+${odontologo.apellido}"
+                            th:selected="${odontologo.id_Odontologo==odontologoSeleccionado.id_Odontologo}">
                     </option>
                 </select>
             </div>
 
             <div class="col-12 mb-1">
                 <label for="coment" class="form-label">Comentarios</label>
-                <textarea class="form-control"  id="coment" rows="3" placeholder="Opcional" style="resize: none" name="comentarios" th:text="${cita.comentarios}"></textarea>
+                <textarea class="form-control"  id="coment"
+                          rows="3" placeholder="Opcional" style="resize: none" name="comentarios" th:text="${cita.comentarios}"></textarea>
             </div>
         </div>
         <div class="col-12 mt-3 text-end">
             <button type="submit" class="btn btn-primary">Editar</button>
-            <a th:href="@{/cita}" class="btn btn-danger">Regresar</a>
+            <a th:href="@{/cita}" class="btn btn-danger">Cerrar</a>
         </div>
     </form>
 </div>

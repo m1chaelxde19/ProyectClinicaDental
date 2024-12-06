@@ -68,5 +68,11 @@ public class Odontologo {
         this.especialidad = especialidad;
         this.telefono = telefono;
     }
+
+    public Odontologo(Long id_Odontologo, String nombre, String apellido) {
+        this.id_Odontologo = id_Odontologo;
+        this.nombre = nombre;
+        this.apellido = apellido;
+    }
 }
 

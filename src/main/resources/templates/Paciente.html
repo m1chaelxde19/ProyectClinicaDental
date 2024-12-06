@@ -75,8 +75,8 @@
                         <td th:text="${paciente.direccion}"></td>
                         <td th:text="${paciente.email}"></td>
                         <td class="d-flex">
-                            <a th:href="@{/paciente/vistaEditPaciente(asdasaa=${paciente.id_paciente})}" class="btn btn-primary" type="button">Editar</a>
-                            <button class="btn btn-danger mx-1" th:attr="onclick=|confirmarEliminar(${paciente.id_paciente})|">Eliminar</button>
+                            <a th:href="@{/paciente/vistaEditPaciente(asdasaa=${paciente.idPaciente})}" class="btn btn-primary" type="button">Editar</a>
+                            <button class="btn btn-danger mx-1" th:attr="onclick=|confirmarEliminar(${paciente.idPaciente})|">Eliminar</button>
                         </td>
                     </tr>
                     </tbody>
@@ -180,7 +180,7 @@
 </script>
 <script th:inline="javascript">
     function confirmarEliminar(id){
-        if (confirm('¿Estas seguro de eliminar esta cita?')){
+        if (confirm('¿Estas seguro de querer quitar de la lista a este Paciente?')){
             document.getElementById('paciente_Id').value=id;
             document.getElementById('eliminarForm').submit();
         }
